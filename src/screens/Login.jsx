@@ -17,14 +17,22 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import PageTitle from '@/components/PageTitle'
-import { useProdutosData } from '@/hooks/useProdutosData'
-import { useEffect } from 'react'
+import { useLoginMutate } from '@/hooks/useLoginMutate'
+import { useState } from 'react'
 
 export function Login() {
-  const { data } = useProdutosData();
-  useEffect(() => {
-    console.log(data)
-  }, [data]);
+
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const { mutate } = useLoginMutate();
+
+  const login = () => {
+    mutate({ email, senha }, {
+      onSuccess: (data) => {
+        localStorage.setItem("modaSustentavelJwt", data.data)
+      }
+    });
+  };
 
   return (<div className="w-screen h-screen flex items-center justify-center">
     <PageTitle title="Login" />
@@ -45,15 +53,19 @@ export function Login() {
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="email@teste.com" />
+              <Input id="email" type="email" placeholder="email@teste.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-1">
               <Label htmlFor="senha">Senha</Label>
-              <Input id="senha" type="password" placeholder="•••••••••••" />
+              <Input id="senha" type="password" placeholder="•••••••••••"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)} />
             </div>
           </CardContent>
           <CardFooter className="flex justify-start">
-            <Button className="w-full">Entrar</Button>
+            <Button className="w-full" onClick={login}>Entrar</Button>
           </CardFooter>
         </Card>
       </TabsContent>

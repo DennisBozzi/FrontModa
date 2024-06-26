@@ -1,7 +1,13 @@
 import { ThemeProvider } from "./components/dark-mode/theme-provider"
 import { ModeToggle } from "./components/dark-mode/mode-toggle"
-import { Login } from "./screens/Login"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Login } from "./screens/Login"
+import { Home } from "./screens/Home"
+
+const router = createBrowserRouter([
+  { path: "/*", element: <Login /> }, { path: "/Home", element: <Home /> },
+]);
 
 const client = new QueryClient();
 
@@ -11,7 +17,7 @@ export function App() {
       <QueryClientProvider client={client}>
         <ThemeProvider>
           <ModeToggle></ModeToggle>
-          <Login></Login>
+          <RouterProvider router={router} />
         </ThemeProvider>
       </QueryClientProvider>
     </>

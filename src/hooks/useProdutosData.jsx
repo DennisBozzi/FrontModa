@@ -12,6 +12,7 @@ export function useProdutosData() {
   const query = useQuery({
     queryFn: fetchData,
     queryKey: ["produtosData"],
+    retry: false
   });
   return query;
 }
