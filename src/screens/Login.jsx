@@ -1,4 +1,4 @@
-import cat from '../assets/cat.png'
+import ecology from '../assets/ecology.png'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -16,18 +16,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import PageTitle from '@/components/PageTitle'
 
 export function Login() {
   return (<div className="w-screen h-screen flex items-center justify-center">
-
-
-
+    <PageTitle title="Login" />
     <Tabs defaultValue="login" className="w-[400px] relative">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="login">Entrar</TabsTrigger>
         <TabsTrigger value="registro">Registrar</TabsTrigger>
       </TabsList>
-      <img src={cat} alt="" className="w-28 absolute -top-28 right-36" />
+      <img src={ecology} alt="" className="w-28 absolute -top-36 right-36" />
       <TabsContent value="login">
         <Card>
           <CardHeader>
