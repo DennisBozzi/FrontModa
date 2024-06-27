@@ -5,21 +5,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Login } from "./screens/Login"
 import { Home } from "./screens/Home"
 
-const router = createBrowserRouter([
-  { path: "/*", element: <Login /> }, { path: "/Home", element: <Home /> },
-]);
 
-const client = new QueryClient();
 
 export function App() {
   return (
     <>
-      <QueryClientProvider client={client}>
-        <ThemeProvider>
-          <ModeToggle></ModeToggle>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </QueryClientProvider>
+      
     </>
   )
 }

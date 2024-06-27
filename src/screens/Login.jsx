@@ -19,6 +19,7 @@ import {
 import PageTitle from '@/components/PageTitle'
 import { useLoginMutate } from '@/hooks/useLoginMutate'
 import { useState } from 'react'
+import { tokenTeste } from '@/hooks/useIsLoggedMutate'
 
 export function Login() {
 
@@ -28,8 +29,10 @@ export function Login() {
 
   const login = () => {
     mutate({ email, senha }, {
-      onSuccess: (data) => {
-        localStorage.setItem("modaSustentavelJwt", data.data)
+      onSuccess: async (data) => { // Make this function async
+        localStorage.setItem("modaSustentavelJwt", data.data);
+        const response = await tokenTeste();
+        console.log(response);
       }
     });
   };

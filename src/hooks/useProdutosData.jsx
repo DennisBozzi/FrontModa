@@ -7,7 +7,6 @@ const fetchData = async () => {
   const response = await axios.get(url + "produto");
   return response.data;
 };
-
 export function useProdutosData() {
   const query = useQuery({
     queryFn: fetchData,
