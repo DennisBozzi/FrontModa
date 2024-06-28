@@ -1,6 +1,9 @@
 
+import { RocketIcon } from "@radix-ui/react-icons";
+
 export function showErrorToast(titulo, descricao) {
   return {
+    variant: "destructive",
     title: titulo,
     description: descricao,
     status: "error",

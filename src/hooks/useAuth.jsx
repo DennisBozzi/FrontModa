@@ -1,5 +1,7 @@
+import { showErrorToast } from '@/components/ui/showToast';
 import axios from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useToast } from '@/components/ui/use-toast';
 
 const AuthContext = createContext();
 
@@ -8,7 +10,6 @@ export const useAuth = () => useContext(AuthContext);
 export const verifyToken = async () => {
   const token = localStorage.getItem('authToken');
   if (!token) {
-    // setUser(null); Remova esta linha, pois setUser não estará disponível fora do contexto
     return false;
   }
   try {
@@ -18,11 +19,10 @@ export const verifyToken = async () => {
       },
     });
 
-    return response.data; // Supondo que o endpoint retorna true se o token é válido
+    return response.data;
   } catch (error) {
     console.error('Erro ao verificar o token', error);
     localStorage.removeItem('authToken');
-    // setUser(null); Remova esta linha
     return false;
   }
 };
@@ -51,11 +51,18 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkToken = async () => {
+    const { toast } = useToast();
+    
+    if (!localStorage.getItem('authToken')) {
+      return false;
+    }
+
     const isValid = await verifyToken();
+
     if (!isValid) {
       setUser(null);
       localStorage.removeItem('authToken');
-      throw new Error('Sessão expirada. Faça login novamente.')
+      toast(showErrorToast('Faça o login', 'Inicie uma sessão para continuar'));
     }
     return isValid;
   };

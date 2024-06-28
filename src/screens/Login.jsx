@@ -27,7 +27,7 @@ export function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const { login, checkToken } = useAuth();
+  const { login } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -35,7 +35,6 @@ export function Login() {
     e.preventDefault();
     try {
       await login(email, senha);
-      await checkToken();
       navigate('/Home');
       toast(showSuccessToast('Login efetuado', 'Seja bem vindo!'));
     } catch (e) {
