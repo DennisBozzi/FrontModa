@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import leaf from '../assets/leaf.png'
 import { Button } from "@/components/ui/button"
 import {
@@ -17,24 +18,29 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import PageTitle from '@/components/PageTitle'
-import { useLoginMutate } from '@/hooks/useLoginMutate'
-import { useState } from 'react'
-import { tokenTeste } from '@/hooks/useIsLoggedMutate'
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom'
+import { showSuccessToast, showErrorToast } from '@/components/ui/showToast'
+import { useToast } from "@/components/ui/use-toast"
 
 export function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const { mutate } = useLoginMutate();
+  const { login, checkToken } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const login = () => {
-    mutate({ email, senha }, {
-      onSuccess: async (data) => { // Make this function async
-        localStorage.setItem("modaSustentavelJwt", data.data);
-        const response = await tokenTeste();
-        console.log(response);
-      }
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(email, senha);
+      await checkToken();
+      navigate('/Home');
+      toast(showSuccessToast('Login efetuado', 'Seja bem vindo!'));
+    } catch (e) {
+      toast(showErrorToast('Falha no login', e.message));
+    }
   };
 
   return (<div className="w-screen h-screen flex items-center justify-center">
@@ -53,23 +59,26 @@ export function Login() {
               Preencha os campos Email e Senha. Depois, confirme para se conectar.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="email@teste.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="senha">Senha</Label>
-              <Input id="senha" type="password" placeholder="•••••••••••"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)} />
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-start">
-            <Button className="w-full" onClick={login}>Entrar</Button>
-          </CardFooter>
+          <form onSubmit={handleSubmit}>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="email@teste.com"
+                  value={email} required
+                  onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="senha">Senha</Label>
+                <Input id="senha" type="password" placeholder="•••••••••••"
+                  value={senha} required
+                  onChange={(e) => setSenha(e.target.value)} />
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-start">
+              <Button className="w-full" type="submit">Entrar</Button>
+            </CardFooter>
+          </form>
+
         </Card>
       </TabsContent>
 
