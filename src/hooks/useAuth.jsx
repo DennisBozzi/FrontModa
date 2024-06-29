@@ -1,7 +1,5 @@
-import { showErrorToast } from '@/components/ui/showToast';
 import axios from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useToast } from '@/components/ui/use-toast';
 
 const AuthContext = createContext();
 
@@ -51,7 +49,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkToken = async () => {
-    const { toast } = useToast();
     
     if (!localStorage.getItem('authToken')) {
       return false;
@@ -62,7 +59,8 @@ const AuthProvider = ({ children }) => {
     if (!isValid) {
       setUser(null);
       localStorage.removeItem('authToken');
-      toast(showErrorToast('Faça o login', 'Inicie uma sessão para continuar'));
+      console.log(1)
+      throw(new Error('Login ou senha incorretos'));
     }
     return isValid;
   };
