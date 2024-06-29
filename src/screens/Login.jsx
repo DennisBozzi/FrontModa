@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { ReloadIcon } from "@radix-ui/react-icons"
 import leaf from '../assets/leaf.png'
 import { Button } from "@/components/ui/button"
 import {
@@ -25,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export function Login() {
 
+  const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const { login } = useAuth();
@@ -33,11 +35,13 @@ export function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await login(email, senha);
       navigate('/Home');
       toast(showSuccessToast('Login efetuado', 'Seja bem vindo!'));
     } catch (e) {
+      setLoading(false);
       toast(showErrorToast('Falha no login', e.message));
     }
   };
@@ -63,18 +67,24 @@ export function Login() {
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="email@teste.com"
+                  disabled={isLoading}
                   value={email} required
                   onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="senha">Senha</Label>
+                <Label htmlFor="senha" disabled={isLoading}>Senha</Label>
                 <Input id="senha" type="password" placeholder="•••••••••••"
+                  disabled={isLoading}
                   value={senha} required
                   onChange={(e) => setSenha(e.target.value)} />
               </div>
             </CardContent>
             <CardFooter className="flex justify-start">
-              <Button className="w-full" type="submit">Entrar</Button>
+              <Button className="w-full" type="submit" disabled={isLoading}>
+                <ReloadIcon
+                  className={isLoading ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                {isLoading ? "Carregando..." : "Entrar"}
+              </Button>
             </CardFooter>
           </form>
 

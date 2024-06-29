@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
+const url = 'https://backmoda.onrender.com/';
 
 export const verifyToken = async () => {
   const token = localStorage.getItem('authToken');
@@ -11,7 +12,7 @@ export const verifyToken = async () => {
     return false;
   }
   try {
-    const response = await axios.get('http://localhost:55000/Auth/Teste', {
+    const response = await axios.get(url + 'Auth/Teste', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -30,11 +31,11 @@ const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('http://localhost:55000/Auth/Login', { email, password });
+      const response = await axios.post(url + 'Auth/Login', { email, password });
       const token = response.data;
       const status = response.status
       if (status !== 200) {
-        throw new Error('Login ou senha incorretos.');
+        throw new Error('Login ou senha incorretos');
       }
       localStorage.setItem('authToken', token);
       setUser({ email });
@@ -49,7 +50,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkToken = async () => {
-    
+
     if (!localStorage.getItem('authToken')) {
       return false;
     }
@@ -60,7 +61,7 @@ const AuthProvider = ({ children }) => {
       setUser(null);
       localStorage.removeItem('authToken');
       console.log(1)
-      throw(new Error('Login ou senha incorretos'));
+      throw (new Error('Login ou senha incorretos'));
     }
     return isValid;
   };
