@@ -23,6 +23,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom'
 import { showSuccessToast, showErrorToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
+import { LoaderCircle } from 'lucide-react'
 
 export function Login() {
 
@@ -81,7 +82,7 @@ export function Login() {
             </CardContent>
             <CardFooter className="flex justify-start">
               <Button className="w-full" type="submit" disabled={isLoading}>
-                <ReloadIcon
+                <LoaderCircle
                   className={isLoading ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
                 {isLoading ? "Carregando..." : "Entrar"}
               </Button>
