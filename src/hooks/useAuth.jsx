@@ -45,8 +45,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem('authToken');
+    window.location.reload();
   };
 
   const checkToken = async () => {
