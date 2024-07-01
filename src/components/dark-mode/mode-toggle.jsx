@@ -12,7 +12,7 @@ import { useTheme } from "@/components/dark-mode/theme-provider"
 export function ModeToggle() {
   const { setTheme } = useTheme()
 
-  return (<div className="absolute top-3 right-3">
+  return (<div className="fixed bottom-5 right-5">
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">

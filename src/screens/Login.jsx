@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { ReloadIcon } from "@radix-ui/react-icons"
 import leaf from '../assets/leaf.png'
 import { Button } from "@/components/ui/button"
 import {

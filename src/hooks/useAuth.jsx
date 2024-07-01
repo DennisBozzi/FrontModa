@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
-const url = 'https://backmoda.onrender.com/';
+const url = 'http://localhost:55000/';
 
 export const verifyToken = async () => {
   const token = localStorage.getItem('authToken');
