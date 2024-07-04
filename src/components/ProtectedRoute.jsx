@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
-import 'ldrs/bouncy';
+import { bouncy } from 'ldrs';
 
 export const IsLoggedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const { checkToken } = useAuth();
+  bouncy.register();
 
   const verifyAuth = async () => {
     const result = await checkToken();
@@ -15,7 +16,6 @@ export const IsLoggedRoute = ({ children }) => {
 
   if (isAuthenticated === null) {
     return <div className='fixed right-2/4 top-2/4'><l-bouncy size="60" color="green" /></div>
-
   }
 
   if (isAuthenticated) {
