@@ -40,7 +40,7 @@ export function MenuNavigation({ children }) {
   const isMarcado = (path) => pathname === path ? marcado : naoMarcado;
   const { logout } = useAuth();
 
-  return <div className="flex h-lvh">
+  return <div className="flex min-h-screen w-full bg-muted/40">
 
     <aside className=" h-100 inset-y-0 left-0 z-10 hidden flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 py-4">
