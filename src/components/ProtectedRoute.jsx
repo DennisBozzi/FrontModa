@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
+import 'ldrs/bouncy';
 
 export const IsLoggedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -13,8 +14,8 @@ export const IsLoggedRoute = ({ children }) => {
   verifyAuth();
 
   if (isAuthenticated === null) {
-    // Colocar componente de loading
-    return null;
+    return <div className='fixed right-2/4 top-2/4'><l-bouncy size="60" color="green" /></div>
+
   }
 
   if (isAuthenticated) {
@@ -34,7 +35,6 @@ export const LoginRoute = ({ children }) => {
   verifyAuth();
 
   if (isAuthenticated === null) {
-    // Colocar componente de loading    
     return null;
   }
 

@@ -1,5 +1,6 @@
-import axios from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -40,6 +41,7 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem('authToken', token);
       setUser({ email });
     } catch (error) {
+      <Navigate to="/" replace />;
       throw error;
     }
   };
@@ -60,7 +62,6 @@ const AuthProvider = ({ children }) => {
     if (!isValid) {
       setUser(null);
       localStorage.removeItem('authToken');
-      console.log(1)
       throw (new Error('Login ou senha incorretos'));
     }
     return isValid;
