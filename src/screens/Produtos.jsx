@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { MenuNavigation } from "./MenuNavigation";
 import { Button } from "@/components/ui/button"
-import { PlusCircle, MoreHorizontal } from "lucide-react"
+import { PlusCircle, Pencil, Trash2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   Tabs,
@@ -62,7 +62,7 @@ export function Produtos() {
           <div className="flex place-content-between">
             <TabsList>
               <TabsTrigger value="todos">Todos</TabsTrigger>
-              <TabsTrigger value="ativos">Ativos</TabsTrigger>
+              <TabsTrigger value="estoque">Estoque</TabsTrigger>
               <TabsTrigger value="vendidos">Vendidos</TabsTrigger>
             </TabsList>
 
@@ -75,7 +75,7 @@ export function Produtos() {
           </div>
 
           <TabsContent value="todos">
-            <Card x-chunk="dashboard-06-chunk-0">
+            <Card>
               <CardHeader>
                 <CardTitle>Produtos</CardTitle>
                 <CardDescription>
@@ -84,16 +84,18 @@ export function Produtos() {
               </CardHeader>
               <CardContent id="tablePai" className="overflow-y-auto">
                 <Table id="table">
+
                   <TableHeader>
+
                     <TableRow>
                       <TableHead>Nome</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Preço</TableHead>
-                      <TableHead>
-                        Opções
-                      </TableHead>
+                      <TableHead className="w-[120px]">Opções</TableHead>
                     </TableRow>
+
                   </TableHeader>
+
                   <TableBody>
                     <TableRow>
                       <TableCell className="font-medium"> Bermuda </TableCell>
@@ -101,352 +103,427 @@ export function Produtos() {
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell className="flex gap-2">
+                        <Button size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium">Jaqueta Jeans</TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>500</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell className="font-medium"> Cueca </TableCell>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
                       <TableCell>
-                        <Badge variant="outline">Ativo</Badge>
+                        <Badge variant="outline">Vendido</Badge>
                       </TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Opções</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                            <DropdownMenuItem>Excluir</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
                       </TableCell>
                     </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">Vendido</Badge>
+                      </TableCell>
+                      <TableCell>15</TableCell>
+                      <TableCell className="flex gap-2">
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Pencil className="h-4 w-4" />
+                          <span className="sr-only">Editar</span>
+                        </Button>
+                        <Button aria-haspopup="true" size="icon" variant="outline">
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Excluir</span>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    
+
                   </TableBody>
                 </Table>
               </CardContent>
