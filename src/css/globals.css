@@ -49,6 +49,28 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  transition: 0.2s;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(38 38 38 / 1);
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(38 38 38 / 0.5);
+}
+
+
 @layer base {
   * {
     @apply border-border;

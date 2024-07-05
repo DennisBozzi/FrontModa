@@ -36,20 +36,12 @@ export function Produtos() {
   useEffect(() => {
     function ajustarTabela() {
       const mainElement = document.getElementById("tablePai");
-      if (mainElement) {
-        const availableHeight = mainElement.clientHeight;
-        const windowHeight = window.innerHeight;
-        const offsetTop = mainElement.getBoundingClientRect().top;
-
-        if (offsetTop + availableHeight > windowHeight) {
-          mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
-        }
-      }
+      const windowHeight = window.innerHeight;
+      const offsetTop = mainElement.getBoundingClientRect().top;
+      mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
     }
-
     ajustarTabela();
     window.addEventListener("resize", ajustarTabela);
-
     return () => {
       window.removeEventListener("resize", ajustarTabela);
     };
@@ -88,441 +80,240 @@ export function Produtos() {
                   <TableHeader>
 
                     <TableRow>
+                      <TableHead>#</TableHead>
                       <TableHead>Nome</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Preço</TableHead>
-                      <TableHead className="w-[120px]">Opções</TableHead>
                     </TableRow>
 
                   </TableHeader>
 
                   <TableBody>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
+
                     <TableRow>
-                      <TableCell className="font-medium"> Bermuda </TableCell>
+                      <TableCell className="font-medium"> 1300 </TableCell>
+                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
                       <TableCell>
                         <Badge variant="outline">Vendido</Badge>
                       </TableCell>
                       <TableCell>15</TableCell>
-                      <TableCell className="flex gap-2">
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Pencil className="h-4 w-4" />
-                          <span className="sr-only">Editar</span>
-                        </Button>
-                        <Button aria-haspopup="true" size="icon" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Excluir</span>
-                        </Button>
-                      </TableCell>
                     </TableRow>
-                    
 
                   </TableBody>
                 </Table>
