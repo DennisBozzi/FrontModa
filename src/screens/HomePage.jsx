@@ -1,7 +1,6 @@
 import React from "react"
 import { MenuNavigation } from "./MenuNavigation"
 
-
 export function HomePage() {
   return <>
     <MenuNavigation>

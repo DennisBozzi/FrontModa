@@ -17,13 +17,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   Table,
   TableBody,
   TableCell,
@@ -33,12 +26,10 @@ import {
 } from "@/components/ui/table"
 
 export function Produtos() {
+
   useEffect(() => {
     function ajustarTabela() {
-      const mainElement = document.getElementById("tablePai");
-      const windowHeight = window.innerHeight;
-      const offsetTop = mainElement.getBoundingClientRect().top;
-      mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
+      ajustar();
     }
     ajustarTabela();
     window.addEventListener("resize", ajustarTabela);
@@ -47,13 +38,20 @@ export function Produtos() {
     };
   }, []);
 
+  function ajustar() {
+    const mainElement = document.getElementById("tablePai");
+    const windowHeight = window.innerHeight;
+    const offsetTop = mainElement.getBoundingClientRect().top;
+    mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
+  }
+
   return <>
     <MenuNavigation>
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <Tabs defaultValue="todos">
           <div className="flex place-content-between">
             <TabsList>
-              <TabsTrigger value="todos">Todos</TabsTrigger>
+              <TabsTrigger onClick={() => ajustar()} value="todos">Todos</TabsTrigger>
               <TabsTrigger value="estoque">Estoque</TabsTrigger>
               <TabsTrigger value="vendidos">Vendidos</TabsTrigger>
             </TabsList>
@@ -319,6 +317,10 @@ export function Produtos() {
                 </Table>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="estoque">
+            <h1>Salame</h1>
           </TabsContent>
 
         </Tabs>
