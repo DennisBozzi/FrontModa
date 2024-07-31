@@ -20,11 +20,12 @@ export const verifyToken = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data;
   } catch (error) {
-    console.error('Erro ao verificar o token', error);
     localStorage.removeItem('authToken');
+    if(error.response.status === 401){
+      window.location.reload();
+    }
     return false;
   }
 };
@@ -48,6 +49,7 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(url + 'Auth/Login', { email, password });
       const token = response.data;
       const status = response.status
+
       if (status !== 200) {
         throw new Error('Login ou senha incorretos');
       }
@@ -70,13 +72,12 @@ const AuthProvider = ({ children }) => {
     }
 
     const isValid = await verifyToken();
-
     if (!isValid) {
       setUser(null);
       localStorage.removeItem('authToken');
       throw new Error('Login ou senha incorretos');
     }
-
+    
     return isValid;
   };
 
