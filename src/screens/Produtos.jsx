@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { MenuNavigation } from "./MenuNavigation";
 import { Button } from "@/components/ui/button"
-import { PlusCircle, Pencil, Trash2 } from "lucide-react"
+import { PlusCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   Tabs,
@@ -24,9 +24,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useProdutosData } from "@/hooks/useProdutosData";
 
 export function Produtos() {
 
+  // Format Price
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price);
+  };
+
+  // Get dos Produtos
+  const { data, error, isLoading } = useProdutosData();
+
+  useEffect(() => {
+    if (!isLoading)
+      console.log(data);
+  }, [data]);
+
+  // Ajustando a tabela
   useEffect(() => {
     function ajustarTabela() {
       ajustar();
@@ -45,6 +60,7 @@ export function Produtos() {
     mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
   }
 
+  // Return
   return <>
     <MenuNavigation>
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -69,7 +85,7 @@ export function Produtos() {
               <CardHeader>
                 <CardTitle>Produtos</CardTitle>
                 <CardDescription>
-                  Gerencia os preços e as informações dos produtos.
+                  Gerencie os preços e as informações dos produtos.
                 </CardDescription>
               </CardHeader>
               <CardContent id="tablePai" className="overflow-y-auto">
@@ -87,231 +103,21 @@ export function Produtos() {
                   </TableHeader>
 
                   <TableBody>
+                    {/* Map com os produtos da requisição */}
 
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
+                    {!isLoading && data.objeto.map((produto) => (
+                      <TableRow key={produto.id}>
+                        <TableCell className="font-medium">{produto.id}</TableCell>
+                        <TableCell className="font-medium">{produto.nome}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                        </TableCell>
+                        <TableCell>{formatPrice(produto.preco)}</TableCell>
+                      </TableRow>
+                    ))
+                    }
 
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
 
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                      <TableCell className="font-medium"> 1300 </TableCell>
-                      <TableCell className="font-medium"> Bermuda de Cor Marrom</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">Vendido</Badge>
-                      </TableCell>
-                      <TableCell>15</TableCell>
-                    </TableRow>
 
                   </TableBody>
                 </Table>

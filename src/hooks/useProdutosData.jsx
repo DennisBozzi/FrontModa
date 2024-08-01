@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const url = "http://localhost:55000/";
+const url = "https://backmoda.onrender.com/";
 
 const fetchData = async () => {
   const response = await axios.get(url + "produto");
