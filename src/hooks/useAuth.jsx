@@ -23,7 +23,7 @@ export const verifyToken = async () => {
     return response.data;
   } catch (error) {
     localStorage.removeItem('authToken');
-    if(error.response.status === 401){
+    if (error.response.status === 401) {
       window.location.reload();
     }
     return false;
@@ -77,14 +77,16 @@ const AuthProvider = ({ children }) => {
       localStorage.removeItem('authToken');
       throw new Error('Login ou senha incorretos');
     }
-    
+
     return isValid;
   };
 
   return (
     <AuthContext.Provider value={{ user, login, logout, verifyToken, checkToken, loading }}>
       {children}
-      {loading && <div className='fixed right-2/4 top-2/4'><l-bouncy size="60" color="green" /></div>}
+      {loading && <div className='flex items-center justify-center h-screen w-screen'>
+        <l-bouncy size="60" color="green" />
+      </div>}
     </AuthContext.Provider>
   );
 };

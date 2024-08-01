@@ -17,7 +17,9 @@ export const IsLoggedRoute = ({ children }) => {
   }, [checkToken]);
 
   if (isAuthenticated === null) {
-    return <div className='fixed right-2/4 top-2/4'><l-bouncy size="60" color="green" /></div>
+    return <div className='flex items-center justify-center h-screen w-screen'>
+      <l-bouncy size="60" color="green" />
+    </div>
   }
 
   if (isAuthenticated) {
