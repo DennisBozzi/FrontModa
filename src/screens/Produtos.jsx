@@ -78,13 +78,12 @@ export function Produtos() {
       nome: novoNome,
       preco: novoPreco.replace(",", ".")
     }
-    console.log(data);
     mutate(data)
   }
 
   useEffect(() => {
     if (isSuccess) {
-      toast(showSuccessToast(lastId, novoNome + ', foi cadastrado com sucesso! R$' + novoPreco));
+      toast(showSuccessToast(lastId, novoNome + ', foi cadastrado com sucesso! R$' + formatPrice(novoPreco)));
       setNovoNome("");
       setNovoPreco("");
       setLoadingPost(false);
@@ -144,11 +143,11 @@ export function Produtos() {
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center">
                     <Label htmlFor="nome">Nome</Label>
-                    <Input maxlength="38" value={novoNome} onChange={handleNomeChange} disabled={loadingPost} id="nome" className="col-span-3" />
+                    <Input maxLength="38" value={novoNome} onChange={handleNomeChange} disabled={loadingPost} id="nome" className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center">
                     <Label htmlFor="preco">Preço</Label>
-                    <Input maxlength="7" value={novoPreco} onChange={handlePrecoChange} disabled={loadingPost} id="preco" className="col-span-3" />
+                    <Input maxLength="7" value={novoPreco} onChange={handlePrecoChange} disabled={loadingPost} id="preco" className="col-span-3" />
                   </div>
                 </div>
                 <DialogFooter>
