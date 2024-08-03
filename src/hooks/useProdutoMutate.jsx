@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 const url = "https://backmoda.onrender.com/";
-const token = localStorage.getItem('authToken');
 
 const postData = async (data) => {
+  const token = localStorage.getItem('authToken');
   return await axios.post(url + 'produto', data, {
     headers: { Authorization: `Bearer ${token}` },
   })
