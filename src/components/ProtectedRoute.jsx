@@ -41,7 +41,7 @@ export const LoginRoute = ({ children }) => {
   }, [checkToken]);
 
   if (isAuthenticated === null) {
-    return <div className='fixed right-2/4 top-2/4'><l-bouncy size="60" color="green" /></div>
+    return null;
   }
 
   if (isAuthenticated) {
