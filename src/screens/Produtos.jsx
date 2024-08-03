@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useProdutoMutate } from "@/hooks/useProdutoMutate";
 import { LoaderCircle } from 'lucide-react'
-import { showSuccessToast, showErrorToast } from '@/components/ui/showToast'
+import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
+import utils from "@/utils/utils";
 import {
   Tabs,
   TabsContent,
@@ -43,32 +44,35 @@ import {
   DialogClose
 } from "@/components/ui/dialog";
 
-
 export function Produtos() {
 
-  const [novoNome, setNovoNome] = useState("");
-  const [novoPreco, setNovoPreco] = useState("");
-  const [loadingPost, setLoadingPost] = useState(false);
-  const [lastId, setLastId] = useState(0);
-  const { toast } = useToast();
+  const [novoNome, setNovoNome] = useState("")
+  const [novoPreco, setNovoPreco] = useState("")
+  const [loadingPost, setLoadingPost] = useState(false)
+  const [lastId, setLastId] = useState(0)
+  const [tabela, setTabela] = useState("tabelaTodos")
+  const { ajustarTabela } = utils()
+  const { toast } = useToast()
 
   const handleNomeChange = (e) => {
-    setNovoNome(e.target.value);
-  };
+    const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '')
+    setNovoNome(value)
+  }
 
   const handlePrecoChange = (e) => {
-    setNovoPreco(e.target.value);
-  };
+    const value = e.target.value.replace(/[^0-9,]/g, '')
+    setNovoPreco(value)
+  }
 
   // Format Price ----
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price);
-  };
+    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)
+  }
 
   // Get/Post dos Produtos ----
   const { data, isLoading } = useProdutosData();
   const { mutate, isSuccess } = useProdutoMutate((id) => {
-    setLastId(id);
+    setLastId(id)
   });
 
   // Adicionar novo Produto ----
@@ -92,22 +96,15 @@ export function Produtos() {
 
   // Ajustando a tabela ----
   useEffect(() => {
-    function ajustarTabela() {
-      ajustar();
+    function ajuste() {
+      ajustarTabela(tabela);
     }
-    ajustarTabela();
-    window.addEventListener("resize", ajustarTabela);
+    ajuste();
+    window.addEventListener("resize", ajuste);
     return () => {
-      window.removeEventListener("resize", ajustarTabela);
+      window.removeEventListener("resize", ajuste);
     };
-  }, []);
-
-  function ajustar() {
-    const mainElement = document.getElementById("tablePai");
-    const windowHeight = window.innerHeight;
-    const offsetTop = mainElement.getBoundingClientRect().top;
-    mainElement.style.height = `${windowHeight - offsetTop - 20}px`;
-  }
+  }, [tabela]);
 
   // Return ----
   return <>
@@ -118,9 +115,9 @@ export function Produtos() {
 
             {/* Botões para escolher as tabelas */}
             <TabsList>
-              <TabsTrigger onClick={() => ajustar()} value="todos">Todos</TabsTrigger>
-              <TabsTrigger value="estoque">Estoque</TabsTrigger>
-              <TabsTrigger value="vendidos">Vendidos</TabsTrigger>
+              <TabsTrigger onClick={() => setTabela("tabelaTodos")} value="todos">Todos</TabsTrigger>
+              <TabsTrigger onClick={() => setTabela("tabelaEstoque")} value="estoque">Estoque</TabsTrigger>
+              <TabsTrigger onClick={() => setTabela("tabelaVendido")} value="vendido">Vendidos</TabsTrigger>
             </TabsList>
 
             {/* Dialog para adicionar novo produto*/}
@@ -159,18 +156,17 @@ export function Produtos() {
               </DialogContent>
             </Dialog>
 
-
           </div>
 
           <TabsContent value="todos">
             <Card>
               <CardHeader>
-                <CardTitle>Produtos</CardTitle>
+                <CardTitle>Todos os Produtos</CardTitle>
                 <CardDescription>
                   Gerencie os preços e as informações dos produtos.
                 </CardDescription>
               </CardHeader>
-              <CardContent id="tablePai" className="overflow-y-auto">
+              <CardContent id="tabelaTodos" className="overflow-y-auto">
                 <Table id="table">
 
                   <TableHeader>
@@ -209,9 +205,100 @@ export function Produtos() {
           </TabsContent>
 
           <TabsContent value="estoque">
-            <h1>Salame</h1>
+            <Card>
+              <CardHeader>
+                <CardTitle>Produtos em Estoque</CardTitle>
+                <CardDescription>
+                  Gerencie os preços e as informações dos produtos.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent id="tabelaEstoque" className="overflow-y-auto">
+                <Table id="table">
+
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>#</TableHead>
+                      <TableHead>Nome</TableHead>
+                      <TableHead className="text-center">Status</TableHead>
+                      <TableHead className="text-center">Preço</TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  {/* Map com os produtos da requisição */}
+                  <TableBody>
+                    {!isLoading && data.objeto.map((produto) => (
+                      !produto.vendido &&
+                      <TableRow key={produto.id}>
+                        <TableCell className="font-medium">{produto.id}</TableCell>
+                        <TableCell className="font-medium">{produto.nome}</TableCell>
+                        <TableCell className="text-center">
+                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                        </TableCell>
+                        <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                      </TableRow>
+                    )) || isLoading && Array.from({ length: 18 }).map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-16 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-8 h-4"></Skeleton></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+
+                </Table>
+              </CardContent>
+            </Card>
           </TabsContent>
 
+          <TabsContent value="vendido">
+            <Card>
+              <CardHeader>
+                <CardTitle>Produtos Vendidos</CardTitle>
+                <CardDescription>
+                  Gerencie os preços e as informações dos produtos.
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent id="tabelaVendido" className="overflow-y-auto">
+                <Table id="table">
+
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>#</TableHead>
+                      <TableHead>Nome</TableHead>
+                      <TableHead className="text-center">Status</TableHead>
+                      <TableHead className="text-center">Preço</TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  {/* Map com os produtos da requisição */}
+                  <TableBody>
+                    {!isLoading && data.objeto.map((produto) => (
+                      produto.vendido &&
+                      <TableRow key={produto.id}>
+                        <TableCell className="font-medium">{produto.id}</TableCell>
+                        <TableCell className="font-medium">{produto.nome}</TableCell>
+                        <TableCell className="text-center">
+                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                        </TableCell>
+                        <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                      </TableRow>
+                    )) || isLoading && Array.from({ length: 18 }).map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-16 h-4"></Skeleton></TableCell>
+                        <TableCell><Skeleton className="w-8 h-4"></Skeleton></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </main>
     </MenuNavigation >
