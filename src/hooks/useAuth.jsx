@@ -9,6 +9,24 @@ bouncy.register();
 export const useAuth = () => useContext(AuthContext);
 const url = 'https://backmoda.onrender.com/';
 
+// -----
+const fetchToken = async () => {
+  const token = localStorage.getItem('authToken');
+  const response = await axios.get(url + "produto", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+export function useToken() {
+  const query = useQuery({
+    queryFn: fetchData,
+    queryKey: ["produtosData"],
+    retry: false
+  });
+  return query;
+}
+
+//----
 export const verifyToken = async () => {
   const token = localStorage.getItem('authToken');
   if (!token) {

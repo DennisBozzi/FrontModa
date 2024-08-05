@@ -55,8 +55,8 @@ export function Produtos() {
   const { toast } = useToast()
 
   const handleNomeChange = (e) => {
-    const value = e.target.value.replace(/[^a-zA-Z0-9\s]/g, '')
-    setNovoNome(value)
+    const value = e.target.value.replace(/[^a-zA-Z0-9\s\u00C0-\u00FF]/g, '');
+    setNovoNome(value);
   }
 
   const handlePrecoChange = (e) => {
