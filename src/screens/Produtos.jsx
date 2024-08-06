@@ -225,17 +225,28 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading && data.objeto.map((produto) => (
-                      !produto.vendido &&
-                      <TableRow key={produto.id}>
-                        <TableCell className="font-medium">{produto.id}</TableCell>
-                        <TableCell className="font-medium">{produto.nome}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
-                        </TableCell>
-                        <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
-                      </TableRow>
-                    ))}
+                    {!isLoading ? (
+                      data.objeto.map((produto) => (
+                        !produto.vendido &&
+                        <TableRow key={produto.id}>
+                          <TableCell className="font-medium">{produto.id}</TableCell>
+                          <TableCell className="font-medium">{produto.nome}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                          </TableCell>
+                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      Array.from({ length: 50 }).map((_, index) => (
+                        <TableRow key={index}>
+                          <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-16 h-4 m-auto"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-8 h-4 m-auto"></Skeleton></TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
 
                 </Table>
@@ -267,17 +278,28 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading && data.objeto.map((produto) => (
-                      produto.vendido &&
-                      <TableRow key={produto.id}>
-                        <TableCell className="font-medium">{produto.id}</TableCell>
-                        <TableCell className="font-medium">{produto.nome}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
-                        </TableCell>
-                        <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
-                      </TableRow>
-                    ))}
+                    {!isLoading ? (
+                      data.objeto.map((produto) => (
+                        produto.vendido &&
+                        <TableRow key={produto.id}>
+                          <TableCell className="font-medium">{produto.id}</TableCell>
+                          <TableCell className="font-medium">{produto.nome}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                          </TableCell>
+                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      Array.from({ length: 50 }).map((_, index) => (
+                        <TableRow key={index}>
+                          <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-16 h-4 m-auto"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-8 h-4 m-auto"></Skeleton></TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
 
