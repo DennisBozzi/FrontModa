@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useProdutosData } from "@/hooks/useProdutosData";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useProdutoMutate } from "@/hooks/useProdutoMutate";
 import { LoaderCircle } from 'lucide-react'
 import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
-import utils from "@/utils/utils";
+import { spiral } from "ldrs";
 import {
   Tabs,
   TabsContent,
@@ -43,16 +42,27 @@ import {
   DialogTrigger,
   DialogClose
 } from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 export function Produtos() {
 
   const [novoNome, setNovoNome] = useState("")
   const [novoPreco, setNovoPreco] = useState("")
   const [loadingPost, setLoadingPost] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [previousPage, setPreviousPage] = useState(0)
+  const [nextPage, setNextPage] = useState(2)
   const [lastId, setLastId] = useState(0)
-  const [tabela, setTabela] = useState("tabelaTodos")
-  const { ajustarTabela } = utils()
   const { toast } = useToast()
+  spiral.register();
 
   const handleNomeChange = (e) => {
     const value = e.target.value.replace(/[^a-zA-Z0-9\s\u00C0-\u00FF]/g, '');
@@ -94,17 +104,7 @@ export function Produtos() {
     }
   }, [isSuccess]);
 
-  // Ajustando a tabela ----
-  useEffect(() => {
-    function ajuste() {
-      ajustarTabela(tabela);
-    }
-    ajuste();
-    window.addEventListener("resize", ajuste);
-    return () => {
-      window.removeEventListener("resize", ajuste);
-    };
-  }, [tabela]);
+
 
   // Return ----
   return <>
@@ -115,15 +115,15 @@ export function Produtos() {
 
             {/* Botões para escolher as tabelas */}
             <TabsList>
-              <TabsTrigger onClick={() => setTabela("tabelaTodos")} value="todos">Todos</TabsTrigger>
-              <TabsTrigger onClick={() => setTabela("tabelaEstoque")} value="estoque">Estoque</TabsTrigger>
-              <TabsTrigger onClick={() => setTabela("tabelaVendido")} value="vendido">Vendidos</TabsTrigger>
+              <TabsTrigger value="todos">Todos</TabsTrigger>
+              <TabsTrigger value="estoque">Estoque</TabsTrigger>
+              <TabsTrigger value="vendido">Vendidos</TabsTrigger>
             </TabsList>
 
             {/* Dialog para adicionar novo produto*/}
             <Dialog handler={false}>
-              <DialogTrigger asChild>
-                <Button onClick={() => { setNovoNome(""); setNovoPreco(""); }} size="sm" className="h-7 gap-1">
+              <DialogTrigger asChild >
+                <Button onClick={() => { setNovoNome(""); setNovoPreco(""); }} size="sm" className="h-7 gap-1 ">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                     Novo Produto
@@ -158,6 +158,7 @@ export function Produtos() {
 
           </div>
 
+          {/* Todos */}
           <TabsContent value="todos">
             <Card>
               <CardHeader>
@@ -166,19 +167,19 @@ export function Produtos() {
                   Gerencie os preços e as informações dos produtos.
                 </CardDescription>
               </CardHeader>
-              <CardContent id="tabelaTodos" className="overflow-y-auto">
-                <Table id="table">
+              <CardContent className="tabela overflow-y-auto">
+                {!isLoading && <Table id="table">
 
                   <TableHeader>
                     <TableRow>
-                      <TableHead>#</TableHead>
-                      <TableHead>Nome</TableHead>
-                      <TableHead className="text-center">Status</TableHead>
-                      <TableHead className="text-center">Preço</TableHead>
+                      <TableHead className="w-1/12">#</TableHead>
+                      <TableHead className="w-2/6">Nome</TableHead>
+                      <TableHead className="text-center w-2/6">Status</TableHead>
+                      <TableHead className="text-center w-2/6">Preço</TableHead>
                     </TableRow>
                   </TableHeader>
 
-                  {/* Map com os produtos da requisição */}
+                  {/* Body */}
                   <TableBody>
                     {!isLoading && data.objeto.map((produto) => (
                       <TableRow key={produto.id}>
@@ -189,21 +190,17 @@ export function Produtos() {
                         </TableCell>
                         <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                       </TableRow>
-                    )) || isLoading && Array.from({ length: 18 }).map((_, index) => (
-                      <TableRow key={index}>
-                        <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-16 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-8 h-4"></Skeleton></TableCell>
-                      </TableRow>
                     ))}
                   </TableBody>
 
-                </Table>
+                </Table> || isLoading && <div className='flex items-center justify-center'>
+                  <l-spiral size="60" color="green" />
+                </div>}
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Estoque */}
           <TabsContent value="estoque">
             <Card>
               <CardHeader>
@@ -213,19 +210,19 @@ export function Produtos() {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent id="tabelaEstoque" className="overflow-y-auto">
+              <CardContent className="tabela overflow-y-auto">
                 <Table id="table">
 
                   <TableHeader>
                     <TableRow>
-                      <TableHead>#</TableHead>
-                      <TableHead>Nome</TableHead>
-                      <TableHead className="text-center">Status</TableHead>
-                      <TableHead className="text-center">Preço</TableHead>
+                      <TableHead className="w-1/12">#</TableHead>
+                      <TableHead className="w-2/6">Nome</TableHead>
+                      <TableHead className="text-center w-2/6">Status</TableHead>
+                      <TableHead className="text-center w-2/6">Preço</TableHead>
                     </TableRow>
                   </TableHeader>
 
-                  {/* Map com os produtos da requisição */}
+                  {/* Body */}
                   <TableBody>
                     {!isLoading && data.objeto.map((produto) => (
                       !produto.vendido &&
@@ -237,13 +234,6 @@ export function Produtos() {
                         </TableCell>
                         <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                       </TableRow>
-                    )) || isLoading && Array.from({ length: 18 }).map((_, index) => (
-                      <TableRow key={index}>
-                        <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-16 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-8 h-4"></Skeleton></TableCell>
-                      </TableRow>
                     ))}
                   </TableBody>
 
@@ -252,6 +242,7 @@ export function Produtos() {
             </Card>
           </TabsContent>
 
+          {/* Vendido */}
           <TabsContent value="vendido">
             <Card>
               <CardHeader>
@@ -261,19 +252,19 @@ export function Produtos() {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent id="tabelaVendido" className="overflow-y-auto">
+              <CardContent className="tabela overflow-y-auto">
                 <Table id="table">
 
                   <TableHeader>
                     <TableRow>
-                      <TableHead>#</TableHead>
-                      <TableHead>Nome</TableHead>
-                      <TableHead className="text-center">Status</TableHead>
-                      <TableHead className="text-center">Preço</TableHead>
+                      <TableHead className="w-1/12">#</TableHead>
+                      <TableHead className="w-2/6">Nome</TableHead>
+                      <TableHead className="text-center w-2/6">Status</TableHead>
+                      <TableHead className="text-center w-2/6">Preço</TableHead>
                     </TableRow>
                   </TableHeader>
 
-                  {/* Map com os produtos da requisição */}
+                  {/* Body */}
                   <TableBody>
                     {!isLoading && data.objeto.map((produto) => (
                       produto.vendido &&
@@ -285,21 +276,42 @@ export function Produtos() {
                         </TableCell>
                         <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                       </TableRow>
-                    )) || isLoading && Array.from({ length: 18 }).map((_, index) => (
-                      <TableRow key={index}>
-                        <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-16 h-4"></Skeleton></TableCell>
-                        <TableCell><Skeleton className="w-8 h-4"></Skeleton></TableCell>
-                      </TableRow>
                     ))}
                   </TableBody>
-
                 </Table>
+
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
+
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            {previousPage > 0 &&
+              <PaginationItem>
+                <PaginationLink href="#">{previousPage}</PaginationLink>
+              </PaginationItem>
+            }
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                {currentPage}
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">{nextPage}</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+
       </main>
     </MenuNavigation >
   </>

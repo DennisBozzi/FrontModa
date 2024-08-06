@@ -41,7 +41,7 @@ export function MenuNavigation({ children }) {
 
   return <div className="flex min-h-screen w-full bg-muted/40">
 
-    <aside className=" h-100 inset-y-0 left-0 z-10 hidden flex-col border-r bg-background sm:flex">
+    <aside className="h-lvh inset-y-0 left-0 z-10 hidden flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 py-4">
 
         <Link to='/Home' className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base">
@@ -138,7 +138,7 @@ export function MenuNavigation({ children }) {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
               <Avatar>
-                <User></User>
+                <img src="https://avatars.githubusercontent.com/u/98779786?v=4" alt="" />
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
