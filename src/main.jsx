@@ -1,5 +1,6 @@
 import React from 'react'
 import './css/globals.css'
+import './css/style.css'
 import { App } from './App'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from "./components/dark-mode/theme-provider"

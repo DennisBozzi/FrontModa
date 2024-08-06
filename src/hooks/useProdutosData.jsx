@@ -10,6 +10,7 @@ const fetchData = async () => {
   });
   return response.data;
 };
+
 export function useProdutosData() {
   const query = useQuery({
     queryFn: fetchData,
