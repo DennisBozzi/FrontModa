@@ -11,6 +11,7 @@ export function showErrorToast(titulo, descricao) {
 export function showSuccessToast(titulo, descricao) {
   return {
     title: titulo,
+    variant: "success",
     description: descricao,
     status: "success",
     duration: 3000,

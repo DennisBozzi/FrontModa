@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { MenuNavigation } from "./MenuNavigation";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useProdutosData } from "@/hooks/useProdutosData";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useProdutoMutate } from "@/hooks/useProdutoMutate";
+import React, { useEffect, useState } from "react"
+import { MenuNavigation } from "./MenuNavigation"
+import { Button } from "@/components/ui/button"
+import { PlusCircle } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { useProdutosData } from "@/hooks/useProdutosData"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useProdutoMutate } from "@/hooks/useProdutoMutate"
 import { LoaderCircle } from 'lucide-react'
 import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
-import { spiral } from "ldrs";
+import { Skeleton } from "@/components/ui/skeleton"
+import { spiral } from "ldrs"
 import {
   Tabs,
   TabsContent,
@@ -41,7 +42,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 import {
   Pagination,
   PaginationContent,
@@ -58,9 +59,8 @@ export function Produtos() {
   const [novoPreco, setNovoPreco] = useState("")
   const [loadingPost, setLoadingPost] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [lastId, setLastId] = useState(0)
   const { toast } = useToast()
-  spiral.register();
+  spiral.register()
 
   const handleNomeChange = (e) => {
     const value = e.target.value.replace(/[^a-zA-Z0-9\s\u00C0-\u00FF]/g, '');
@@ -79,9 +79,7 @@ export function Produtos() {
 
   // Get/Post dos Produtos ----
   const { data, isLoading } = useProdutosData();
-  const { mutate, isSuccess } = useProdutoMutate((id) => {
-    setLastId(id)
-  });
+  const { mutate, isSuccess } = useProdutoMutate();
 
   // Adicionar novo Produto ----
   const submit = async () => {
@@ -164,8 +162,7 @@ export function Produtos() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="tabela overflow-y-auto">
-                {!isLoading && <Table id="table">
-
+                <Table id="table">
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-1/12">#</TableHead>
@@ -177,21 +174,29 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading && data.objeto.map((produto) => (
-                      <TableRow key={produto.id}>
-                        <TableCell className="font-medium">{produto.id}</TableCell>
-                        <TableCell className="font-medium">{produto.nome}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
-                        </TableCell>
-                        <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
-                      </TableRow>
-                    ))}
+                    {!isLoading ? (
+                      data.objeto.map((produto) => (
+                        <TableRow key={produto.id}>
+                          <TableCell className="font-medium">{produto.id}</TableCell>
+                          <TableCell className="font-medium">{produto.nome}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                          </TableCell>
+                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      Array.from({ length: 50 }).map((_, index) => (
+                        <TableRow key={index}>
+                          <TableCell><Skeleton className="w-4 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-28 h-4"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-16 h-4 m-auto"></Skeleton></TableCell>
+                          <TableCell><Skeleton className="w-8 h-4 m-auto"></Skeleton></TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
-
-                </Table> || isLoading && <div className='flex items-center justify-center'>
-                  <l-spiral size="60" color="green" />
-                </div>}
+                </Table>
               </CardContent>
             </Card>
           </TabsContent>
@@ -279,8 +284,10 @@ export function Produtos() {
               </CardContent>
             </Card>
           </TabsContent>
+
         </Tabs>
 
+        {/* Pagination */}
         <Pagination className="mt-4">
           <PaginationContent>
             <PaginationItem>
