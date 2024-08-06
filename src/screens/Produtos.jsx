@@ -291,6 +291,7 @@ export function Produtos() {
             {currentPage - 1 > 0 &&
               <PaginationItem>
                 <PaginationLink href="#" onClick={() => (setCurrentPage(currentPage - 1))}>{currentPage - 1}</PaginationLink>
+
               </PaginationItem>
             }
             <PaginationItem>
@@ -305,6 +306,7 @@ export function Produtos() {
             }
             <PaginationItem>
               <PaginationNext href="#" onClick={() => (setCurrentPage(50))} />
+
             </PaginationItem>
           </PaginationContent>
         </Pagination>
