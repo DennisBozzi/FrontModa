@@ -58,8 +58,6 @@ export function Produtos() {
   const [novoPreco, setNovoPreco] = useState("")
   const [loadingPost, setLoadingPost] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const [previousPage, setPreviousPage] = useState(0)
-  const [nextPage, setNextPage] = useState(2)
   const [lastId, setLastId] = useState(0)
   const { toast } = useToast()
   spiral.register();
@@ -288,11 +286,11 @@ export function Produtos() {
         <Pagination className="mt-4">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious href="#" onClick={() => (setCurrentPage(1))} />
             </PaginationItem>
-            {previousPage > 0 &&
+            {currentPage - 1 > 0 &&
               <PaginationItem>
-                <PaginationLink href="#">{previousPage}</PaginationLink>
+                <PaginationLink href="#" onClick={() => (setCurrentPage(currentPage - 1))}>{currentPage - 1}</PaginationLink>
               </PaginationItem>
             }
             <PaginationItem>
@@ -300,14 +298,13 @@ export function Produtos() {
                 {currentPage}
               </PaginationLink>
             </PaginationItem>
+            {currentPage + 1 <= 50 &&
+              <PaginationItem>
+                <PaginationLink href="#" onClick={() => (setCurrentPage(currentPage + 1))}>{currentPage + 1}</PaginationLink>
+              </PaginationItem>
+            }
             <PaginationItem>
-              <PaginationLink href="#">{nextPage}</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext href="#" onClick={() => (setCurrentPage(50))} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
