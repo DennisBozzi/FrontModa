@@ -10,13 +10,12 @@ const postData = async (data) => {
   })
 };
 
-export function useProdutoMutate(id) {
+export function useProdutoMutate() {
   const queryCliente = useQueryClient();
   const mutate = useMutation({
     mutationFn: postData,
-    onSuccess: (response) => {
+    onSuccess: () => {
       queryCliente.invalidateQueries(['produtosData']);
-      id(response.data.objeto[response.data.objeto.length - 1].id);
     },
   })
   return mutate;
