@@ -95,14 +95,12 @@ export function Produtos() {
 
   useEffect(() => {
     if (isSuccess) {
-      toast(showSuccessToast(lastId, novoNome + ', foi cadastrado com sucesso! R$' + formatPrice(novoPreco)));
+      toast(showSuccessToast("Novo produto cadastrado!", novoNome + ', foi cadastrado com sucesso! R$' + formatPrice(novoPreco)));
       setNovoNome("");
       setNovoPreco("");
       setLoadingPost(false);
     }
   }, [isSuccess]);
-
-
 
   // Return ----
   return <>
@@ -291,7 +289,6 @@ export function Produtos() {
             {currentPage - 1 > 0 &&
               <PaginationItem>
                 <PaginationLink href="#" onClick={() => (setCurrentPage(currentPage - 1))}>{currentPage - 1}</PaginationLink>
-
               </PaginationItem>
             }
             <PaginationItem>
@@ -305,8 +302,19 @@ export function Produtos() {
               </PaginationItem>
             }
             <PaginationItem>
-              <PaginationNext href="#" onClick={() => (setCurrentPage(50))} />
+              <Input
+                className="w-12 text-center"
+                onChange={(e) => {
+                  const page = parseInt(e.target.value, 10);
+                  if (!isNaN(page) && page >= 1 && page <= 50) {
+                    setCurrentPage(page);
+                  }
+                }}
+              />
+            </PaginationItem>
 
+            <PaginationItem>
+              <PaginationNext href="#" onClick={() => (setCurrentPage(50))} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
