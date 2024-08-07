@@ -1,34 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '@/api/axiosInstance';
 import { Navigate } from 'react-router-dom';
 import { bouncy } from 'ldrs';
 
-const AuthContext = createContext();
-
 bouncy.register();
-export const useAuth = () => useContext(AuthContext);
-const url = 'https://backmoda.onrender.com/';
 
-export const verifyToken = async () => {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    return false;
-  }
-  try {
-    const response = await axios.get(url + 'Auth/Teste', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    localStorage.removeItem('authToken');
-    if (error.response.status === 401) {
-      window.location.reload();
-    }
-    return false;
-  }
-};
+const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
+
 
 const AuthProvider = ({ children }) => {
 
@@ -43,18 +22,20 @@ const AuthProvider = ({ children }) => {
     initializeAuth();
   }, [])
 
-
   const login = async (email, password) => {
     try {
-      const response = await axios.post(url + 'Auth/Login', { email, password });
+      const response = await axiosInstance.post('/Auth/Login', { email, password });
       const token = response.data;
       const status = response.status
 
       if (status !== 200) {
         throw new Error('Login ou senha incorretos');
       }
+
       localStorage.setItem('authToken', token);
+      axiosInstance.defaults.headers.Authorization = `Bearer ${token}`;
       setUser({ email });
+
     } catch (error) {
       <Navigate to="/" replace />;
       throw error;
@@ -63,6 +44,8 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('authToken');
+    axiosInstance.defaults.headers.Authorization = null;
+    setUser(null);
     window.location.reload();
   };
 
@@ -78,6 +61,19 @@ const AuthProvider = ({ children }) => {
     }
 
     return isValid;
+  };
+
+  const verifyToken = async () => {
+    try {
+      const response = await axiosInstance.get('Auth/CheckToken');
+      return response.data;
+    } catch (error) {
+      localStorage.removeItem('authToken');
+      if (error.response.status === 401) {
+        window.location.reload();
+      }
+      return false;
+    }
   };
 
   return (

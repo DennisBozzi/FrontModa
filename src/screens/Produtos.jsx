@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { MenuNavigation } from "./MenuNavigation"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
@@ -11,7 +11,7 @@ import { LoaderCircle } from 'lucide-react'
 import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import { spiral } from "ldrs"
+import { formatPrice, handleNomeChange, handlePrecoChange } from "@/utils/utils"
 import {
   Tabs,
   TabsContent,
@@ -59,29 +59,13 @@ export function Produtos() {
   const [novoPreco, setNovoPreco] = useState("")
   const [loadingPost, setLoadingPost] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [lastPage, setLastPage] = useState(1)
+  const [tipoProduto, setTipoProduto] = useState(1)
+  const inputPage = useRef(null)
+  const { data, isLoading, isError } = useProdutosData(currentPage, tipoProduto)
+  const { mutate, isSuccess } = useProdutoMutate()
   const { toast } = useToast()
-  spiral.register()
 
-  const handleNomeChange = (e) => {
-    const value = e.target.value.replace(/[^a-zA-Z0-9\s\u00C0-\u00FF]/g, '');
-    setNovoNome(value);
-  }
-
-  const handlePrecoChange = (e) => {
-    const value = e.target.value.replace(/[^0-9,]/g, '')
-    setNovoPreco(value)
-  }
-
-  // Format Price ----
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)
-  }
-
-  // Get/Post dos Produtos ----
-  const { data, isLoading } = useProdutosData();
-  const { mutate, isSuccess } = useProdutoMutate();
-
-  // Adicionar novo Produto ----
   const submit = async () => {
     setLoadingPost(true);
     const data = {
@@ -100,7 +84,20 @@ export function Produtos() {
     }
   }, [isSuccess]);
 
-  // Return ----
+  useEffect(() => {
+    setCurrentPage(1)
+    inputPage.current.value = '';
+    if (!isLoading) {
+      setLastPage(data.objeto.pageTotal)
+    }
+  }, [tipoProduto]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setLastPage(data.objeto.pageTotal)
+    }
+  }, [isLoading]);
+
   return <>
     <MenuNavigation>
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -109,9 +106,9 @@ export function Produtos() {
 
             {/* Botões para escolher as tabelas */}
             <TabsList>
-              <TabsTrigger value="todos">Todos</TabsTrigger>
-              <TabsTrigger value="estoque">Estoque</TabsTrigger>
-              <TabsTrigger value="vendido">Vendidos</TabsTrigger>
+              <TabsTrigger value="todos" onClick={() => (setTipoProduto(1))}>Todos</TabsTrigger>
+              <TabsTrigger value="estoque" onClick={() => (setTipoProduto(2))}>Estoque</TabsTrigger>
+              <TabsTrigger value="vendido" onClick={() => (setTipoProduto(3))}>Vendidos</TabsTrigger>
             </TabsList>
 
             {/* Dialog para adicionar novo produto*/}
@@ -134,11 +131,11 @@ export function Produtos() {
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center">
                     <Label htmlFor="nome">Nome</Label>
-                    <Input maxLength="38" value={novoNome} onChange={handleNomeChange} disabled={loadingPost} id="nome" className="col-span-3" />
+                    <Input maxLength="38" value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={loadingPost} id="nome" className="col-span-3" />
                   </div>
                   <div className="grid grid-cols-4 items-center">
                     <Label htmlFor="preco">Preço</Label>
-                    <Input maxLength="7" value={novoPreco} onChange={handlePrecoChange} disabled={loadingPost} id="preco" className="col-span-3" />
+                    <Input maxLength="7" value={novoPreco} onChange={(e) => (handlePrecoChange(e, setNovoPreco))} disabled={loadingPost} id="preco" className="col-span-3" />
                   </div>
                 </div>
                 <DialogFooter>
@@ -174,8 +171,8 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading ? (
-                      data.objeto.map((produto) => (
+                    {!isLoading && !isError ? (
+                      data.objeto.data.map((produto) => (
                         <TableRow key={produto.id}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
@@ -225,9 +222,8 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading ? (
-                      data.objeto.map((produto) => (
-                        !produto.vendido &&
+                    {!isLoading && !isError ? (
+                      data.objeto.data.map((produto) => (
                         <TableRow key={produto.id}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
@@ -278,9 +274,8 @@ export function Produtos() {
 
                   {/* Body */}
                   <TableBody>
-                    {!isLoading ? (
-                      data.objeto.map((produto) => (
-                        produto.vendido &&
+                    {!isLoading && !isError ? (
+                      data.objeto.data.map((produto) => (
                         <TableRow key={produto.id}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
@@ -325,7 +320,7 @@ export function Produtos() {
                 {currentPage}
               </PaginationLink>
             </PaginationItem>
-            {currentPage + 1 <= 50 &&
+            {currentPage + 1 <= lastPage &&
               <PaginationItem>
                 <PaginationLink href="#" onClick={() => (setCurrentPage(currentPage + 1))}>{currentPage + 1}</PaginationLink>
               </PaginationItem>
@@ -333,9 +328,10 @@ export function Produtos() {
             <PaginationItem>
               <Input
                 className="w-12 text-center"
+                ref={inputPage}
                 onChange={(e) => {
                   const page = parseInt(e.target.value, 10);
-                  if (!isNaN(page) && page >= 1 && page <= 50) {
+                  if (!isNaN(page) && page >= 1 && page <= lastPage) {
                     setCurrentPage(page);
                   }
                 }}
@@ -343,7 +339,7 @@ export function Produtos() {
             </PaginationItem>
 
             <PaginationItem>
-              <PaginationNext href="#" onClick={() => (setCurrentPage(50))} />
+              <PaginationNext href="#" onClick={() => (setCurrentPage(lastPage))} />
             </PaginationItem>
           </PaginationContent>
         </Pagination>

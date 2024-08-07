@@ -1,21 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
-const url = "https://backmoda.onrender.com/";
+const fixedPageSize = 20;
 
-const fetchData = async () => {
-  const token = localStorage.getItem('authToken');
-  const response = await axios.get(url + "produto", {
-    headers: { Authorization: `Bearer ${token}` },
+const fetchData = async ({ queryKey }) => {
+  const [_, pageNumber, tipoProduto] = queryKey;
+  const response = await axiosInstance.get('/produto', {
+    params: { pageNumber, pageSize: fixedPageSize, tipoProduto: tipoProduto }
   });
   return response.data;
 };
 
-export function useProdutosData() {
+export function useProdutosData(pageNumber, tipoProduto) {
   const query = useQuery({
     queryFn: fetchData,
-    queryKey: ["produtosData"],
+    queryKey: ["produtosData", pageNumber, tipoProduto],
     retry: false
   });
+
   return query;
 }
