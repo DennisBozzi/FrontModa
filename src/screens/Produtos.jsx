@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProdutoMutate } from "@/hooks/useProdutoMutate"
 import { LoaderCircle } from 'lucide-react'
-import { showSuccessToast } from '@/components/ui/showToast'
+import { showSuccessToast, showWarningToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
 import FormattedPriceInput from "@/components/ui/price-input"
@@ -56,6 +56,8 @@ import {
 
 export function Produtos() {
 
+  const [produtoSelecionado, setProdutoSelecionado] = useState(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [novoNome, setNovoNome] = useState("")
   const [novoPreco, setNovoPreco] = useState("")
   const [loadingPost, setLoadingPost] = useState(false)
@@ -69,18 +71,34 @@ export function Produtos() {
   const inputSearch = useRef(null)
   const { toast } = useToast()
 
-  const submit = async () => {
+  const submit = async (e) => {
+    e.preventDefault();
     setLoadingPost(true);
     const data = {
       nome: novoNome,
-      preco: novoPreco.replace(",", ".")
+      preco: novoPreco.toString().replace(',', '.'),
+    }
+    if (isDialogOpen) {
+      data.id = produtoSelecionado?.id
     }
     mutate(data)
   }
 
   useEffect(() => {
+    if (isDialogOpen) {
+      setNovoNome(produtoSelecionado?.nome)
+      setNovoPreco(produtoSelecionado?.preco)
+    }
+  }, [isDialogOpen])
+
+  useEffect(() => {
     if (isSuccess && !isLoadingMutate) {
-      toast(showSuccessToast("Novo produto cadastrado!", novoNome + ', foi cadastrado com sucesso! R$' + novoPreco));
+      if (isDialogOpen) {
+        toast(showSuccessToast(novoNome, 'Produto alterado com sucesso! R$' + novoPreco));
+      }
+      if (!isDialogOpen) {
+        toast(showSuccessToast(novoNome, 'Produto cadastrado com sucesso! R$' + novoPreco));
+      }
       setNovoNome("");
       setNovoPreco("");
       setLoadingPost(false);
@@ -88,25 +106,14 @@ export function Produtos() {
   }, [isSuccess]);
 
   useEffect(() => {
-    setCurrentPage(1)
-    if (!isLoading) {
-      setLastPage(data.objeto.pageTotal)
-    }
-  }, [nomeFiltro]);
-
-  useEffect(() => {
-    inputPage.current.value = '';
-    inputSearch.current.value = ''
+    inputPage.current.value = ''; inputSearch.current.value = ''
     if (!isLoading) {
       setLastPage(data.objeto.pageTotal)
     }
   }, [tipoProduto]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setLastPage(data.objeto.pageTotal)
-    }
-  }, [isLoading]);
+  useEffect(() => { setCurrentPage(1); if (!isLoading) { setLastPage(data.objeto.pageTotal) } }, [nomeFiltro]);
+  useEffect(() => { if (!isLoading) { setLastPage(data.objeto.pageTotal) } }, [isLoading]);
 
   return <>
     <MenuNavigation onSearch={(e) => (handleInputChange(e, setNomeFiltro))} ref={inputSearch}>
@@ -132,7 +139,8 @@ export function Produtos() {
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <form onSubmit={submit} >
+
+                <form onSubmit={submit}>
                   <DialogHeader>
                     <DialogTitle>Novo Produto</DialogTitle>
                     <DialogDescription>
@@ -142,11 +150,19 @@ export function Produtos() {
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center">
                       <Label htmlFor='nome'>Nome</Label>
-                      <Input id='nome' maxLength={38} placeholder='Produto' value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={loadingPost} className="col-span-3" />
+                      <Input id='nome' maxLength={38} placeholder='Produto' value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={loadingPost} required className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center">
                       <Label htmlFor='preco'>Preço</Label>
-                      <FormattedPriceInput id='preco' placeholder='0,00' value={novoPreco} onChange={setNovoPreco} maxLength={10} disabled={loadingPost} customInput={Input} className="col-span-3" />
+                      <FormattedPriceInput
+                        id='preco'
+                        placeholder='0,00'
+                        value={novoPreco}
+                        onChange={setNovoPreco}
+                        maxLength={10}
+                        disabled={loadingPost}
+                        customInput={Input}
+                        required className="col-span-3" />
                     </div>
                   </div>
                   <DialogFooter>
@@ -156,6 +172,7 @@ export function Produtos() {
                     </Button>
                   </DialogFooter>
                 </form>
+
               </DialogContent>
             </Dialog>
 
@@ -185,7 +202,7 @@ export function Produtos() {
                   <TableBody>
                     {!isLoading && !isError ? (
                       data.objeto.data.map((produto) => (
-                        <TableRow key={produto.id}>
+                        <TableRow key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
                           <TableCell className="text-center">
@@ -236,7 +253,7 @@ export function Produtos() {
                   <TableBody>
                     {!isLoading && !isError ? (
                       data.objeto.data.map((produto) => (
-                        <TableRow key={produto.id}>
+                        <TableRow key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
                           <TableCell className="text-center">
@@ -288,7 +305,7 @@ export function Produtos() {
                   <TableBody>
                     {!isLoading && !isError ? (
                       data.objeto.data.map((produto) => (
-                        <TableRow key={produto.id}>
+                        <TableRow key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
                           <TableCell className="text-center">
@@ -357,6 +374,60 @@ export function Produtos() {
             </PaginationItem>
           </PaginationContent>
         </Pagination>
+
+        <>
+          <Dialog open={isDialogOpen} onOpenChange={(e) => {
+            setIsDialogOpen(e)
+            setNovoNome(produtoSelecionado?.nome)
+            setNovoPreco(produtoSelecionado?.preco)
+          }}>
+            <DialogContent>
+              <form onSubmit={submit}>
+                <DialogHeader>
+                  <DialogTitle>{produtoSelecionado?.nome}</DialogTitle>
+                  <DialogDescription>
+                    Edite o nome e o preço do produto
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center">
+                    <Label htmlFor='nome'>Nome</Label>
+                    <Input
+                      id='nome'
+                      maxLength={38}
+                      placeholder='Produto'
+                      value={produtoSelecionado?.nome || ''}
+                      onChange={(e) => { handleNomeChange(e, setNovoNome); setProdutoSelecionado({ ...produtoSelecionado, nome: e.target.value }) }}
+                      disabled={loadingPost}
+                      required
+                      className="col-span-3"
+                    />
+                  </div>
+                  <div className="grid grid-cols-4 items-center">
+                    <Label htmlFor='preco'>Preço</Label>
+                    <FormattedPriceInput
+                      id='preco'
+                      placeholder='0,00'
+                      value={produtoSelecionado?.preco || ''}
+                      onChange={((e) => { setProdutoSelecionado({ ...produtoSelecionado, preco: e.target.value }); }, setNovoPreco)}
+                      maxLength={10}
+                      disabled={loadingPost}
+                      customInput={Input}
+                      required
+                      className="col-span-3"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit">
+                    <LoaderCircle className={loadingPost ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                    {loadingPost ? "Carregando..." : "Salvar"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </>
 
       </main>
     </MenuNavigation >
