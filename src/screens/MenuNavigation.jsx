@@ -1,10 +1,11 @@
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar } from '@radix-ui/react-avatar';
 import { useAuth } from '@/hooks/useAuth';
+import { debounce } from 'lodash';
 import {
   Leaf,
   ShoppingBasket,
@@ -36,11 +37,17 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
   const naoMarcadoLeft = 'flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground';
   const isMarcadoLeft = (path) => pathname === path ? marcadoLeft : naoMarcadoLeft;
   const isMarcado = (path) => pathname === path ? marcado : naoMarcado;
-  const searchInput = useRef(null);
   const { logout } = useAuth();
 
+  const debouncedSearch = useCallback(
+    debounce((query) => {
+      onSearch(query);
+    }, 300),
+    []
+  );
+
   const handleInputChange = (event) => {
-    onSearch(event.target.value);
+    debouncedSearch(event.target.value);
   }
 
   return <div className="flex min-h-screen w-full bg-muted/40">

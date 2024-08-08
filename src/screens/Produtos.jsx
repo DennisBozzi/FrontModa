@@ -11,7 +11,8 @@ import { LoaderCircle } from 'lucide-react'
 import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatPrice, handleNomeChange, handlePrecoChange, handleInputChange } from "@/utils/utils"
+import FormattedPriceInput from "@/components/ui/price-input"
+import { formatPrice, handleNomeChange, handleInputChange } from "@/utils/utils"
 import {
   Tabs,
   TabsContent,
@@ -64,7 +65,7 @@ export function Produtos() {
   const [nomeFiltro, setNomeFiltro] = useState("")
   const inputPage = useRef(null)
   const { data, isLoading, isError } = useProdutosData(currentPage, tipoProduto, nomeFiltro)
-  const { mutate, isSuccess } = useProdutoMutate()
+  const { mutate, isSuccess, isLoading: isLoadingMutate } = useProdutoMutate()
   const inputSearch = useRef(null)
   const { toast } = useToast()
 
@@ -78,8 +79,8 @@ export function Produtos() {
   }
 
   useEffect(() => {
-    if (isSuccess) {
-      toast(showSuccessToast("Novo produto cadastrado!", novoNome + ', foi cadastrado com sucesso! R$' + formatPrice(novoPreco)));
+    if (isSuccess && !isLoadingMutate) {
+      toast(showSuccessToast("Novo produto cadastrado!", novoNome + ', foi cadastrado com sucesso! R$' + novoPreco));
       setNovoNome("");
       setNovoPreco("");
       setLoadingPost(false);
@@ -131,28 +132,30 @@ export function Produtos() {
                 </Button>
               </DialogTrigger>
               <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Novo Produto</DialogTitle>
-                  <DialogDescription>
-                    Escreva o nome e o preço do novo produto
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center">
-                    <Label htmlFor="nome">Nome</Label>
-                    <Input maxLength="38" value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={loadingPost} id="nome" className="col-span-3" />
+                <form onSubmit={submit} >
+                  <DialogHeader>
+                    <DialogTitle>Novo Produto</DialogTitle>
+                    <DialogDescription>
+                      Escreva o nome e o preço do novo produto
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center">
+                      <Label htmlFor='nome'>Nome</Label>
+                      <Input id='nome' maxLength={38} placeholder='Produto' value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={loadingPost} className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center">
+                      <Label htmlFor='preco'>Preço</Label>
+                      <FormattedPriceInput id='preco' placeholder='0,00' value={novoPreco} onChange={setNovoPreco} maxLength={10} disabled={loadingPost} customInput={Input} className="col-span-3" />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-4 items-center">
-                    <Label htmlFor="preco">Preço</Label>
-                    <Input maxLength="7" value={novoPreco} onChange={(e) => (handlePrecoChange(e, setNovoPreco))} disabled={loadingPost} id="preco" className="col-span-3" />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="submit" onClick={() => submit()}>
-                    <LoaderCircle
-                      className={loadingPost ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                    {loadingPost ? "Carregando..." : "Salvar"}</Button>
-                </DialogFooter>
+                  <DialogFooter>
+                    <Button type="submit">
+                      <LoaderCircle className={loadingPost ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                      {loadingPost ? "Carregando..." : "Salvar"}
+                    </Button>
+                  </DialogFooter>
+                </form>
               </DialogContent>
             </Dialog>
 
@@ -337,6 +340,8 @@ export function Produtos() {
             <PaginationItem>
               <Input
                 className="w-12 text-center"
+                name='inputPage'
+                type="number"
                 ref={inputPage}
                 onChange={(e) => {
                   const page = parseInt(e.target.value, 10);
