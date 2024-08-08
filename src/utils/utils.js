@@ -11,3 +11,7 @@ export const handlePrecoChange = (e, setNovoPreco) => {
   const value = e.target.value.replace(/[^0-9,]/g, '');
   setNovoPreco(value);
 }
+
+export const handleInputChange = (e, setNomeFiltro) => {
+  setNomeFiltro(e);
+};

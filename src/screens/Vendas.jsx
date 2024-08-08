@@ -1,5 +1,5 @@
 import React from "react";
-import { MenuNavigation } from "./MenuNavigation";
+import MenuNavigation from "./MenuNavigation";
 
 export function Vendas() {
   return <>

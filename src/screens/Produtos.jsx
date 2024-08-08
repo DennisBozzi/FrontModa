@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
-import { MenuNavigation } from "./MenuNavigation"
+import MenuNavigation from "./MenuNavigation"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -11,7 +11,7 @@ import { LoaderCircle } from 'lucide-react'
 import { showSuccessToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatPrice, handleNomeChange, handlePrecoChange } from "@/utils/utils"
+import { formatPrice, handleNomeChange, handlePrecoChange, handleInputChange } from "@/utils/utils"
 import {
   Tabs,
   TabsContent,
@@ -61,9 +61,11 @@ export function Produtos() {
   const [currentPage, setCurrentPage] = useState(1)
   const [lastPage, setLastPage] = useState(1)
   const [tipoProduto, setTipoProduto] = useState(1)
+  const [nomeFiltro, setNomeFiltro] = useState("")
   const inputPage = useRef(null)
-  const { data, isLoading, isError } = useProdutosData(currentPage, tipoProduto)
+  const { data, isLoading, isError } = useProdutosData(currentPage, tipoProduto, nomeFiltro)
   const { mutate, isSuccess } = useProdutoMutate()
+  const inputSearch = useRef(null)
   const { toast } = useToast()
 
   const submit = async () => {
@@ -85,7 +87,15 @@ export function Produtos() {
   }, [isSuccess]);
 
   useEffect(() => {
+    setCurrentPage(1)
+    if (!isLoading) {
+      setLastPage(data.objeto.pageTotal)
+    }
+  }, [nomeFiltro]);
+
+  useEffect(() => {
     inputPage.current.value = '';
+    inputSearch.current.value = ''
     if (!isLoading) {
       setLastPage(data.objeto.pageTotal)
     }
@@ -98,16 +108,16 @@ export function Produtos() {
   }, [isLoading]);
 
   return <>
-    <MenuNavigation>
+    <MenuNavigation onSearch={(e) => (handleInputChange(e, setNomeFiltro))} ref={inputSearch}>
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <Tabs defaultValue="todos">
           <div className="flex place-content-between">
 
             {/* Botões para escolher as tabelas */}
             <TabsList>
-              <TabsTrigger value="todos" onMouseDown={() => (setCurrentPage(1), setTipoProduto(1))}>Todos</TabsTrigger>
-              <TabsTrigger value="estoque" onMouseDown={() => (setCurrentPage(1), setTipoProduto(2))}>Estoque</TabsTrigger>
-              <TabsTrigger value="vendido" onMouseDown={() => (setCurrentPage(1), setTipoProduto(3))}>Vendidos</TabsTrigger>
+              <TabsTrigger value="todos" onClick={() => (setNomeFiltro(''), setCurrentPage(1), setTipoProduto(1))}>Todos</TabsTrigger>
+              <TabsTrigger value="estoque" onClick={() => (setNomeFiltro(''), setCurrentPage(1), setTipoProduto(2))}>Estoque</TabsTrigger>
+              <TabsTrigger value="vendido" onClick={() => (setNomeFiltro(''), setCurrentPage(1), setTipoProduto(3))}>Vendidos</TabsTrigger>
             </TabsList>
 
             {/* Dialog para adicionar novo produto*/}

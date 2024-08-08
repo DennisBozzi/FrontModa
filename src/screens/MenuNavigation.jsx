@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -12,8 +12,7 @@ import {
   Package,
   PanelLeft,
   Search,
-  Settings,
-  User
+  Settings
 } from "lucide-react"
 import {
   Tooltip,
@@ -28,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function MenuNavigation({ children }) {
+const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
   const location = useLocation();
   const pathname = location.pathname;
   const marcado = 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8';
@@ -37,7 +36,12 @@ export function MenuNavigation({ children }) {
   const naoMarcadoLeft = 'flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground';
   const isMarcadoLeft = (path) => pathname === path ? marcadoLeft : naoMarcadoLeft;
   const isMarcado = (path) => pathname === path ? marcado : naoMarcado;
+  const searchInput = useRef(null);
   const { logout } = useAuth();
+
+  const handleInputChange = (event) => {
+    onSearch(event.target.value);
+  }
 
   return <div className="flex min-h-screen w-full bg-muted/40">
 
@@ -131,7 +135,7 @@ export function MenuNavigation({ children }) {
 
         <div className="relative ml-auto flex-1 md:grow-0">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input type="search" id="search" placeholder="Procurar..." className="w-full rounded-lg bg-background pl-8 md:w-[320px] lg:w-[320px]" />
+          <Input type="search" id="search" onChange={handleInputChange} ref={ref} placeholder="Procurar..." className="w-full rounded-lg bg-background pl-8 md:w-[320px] lg:w-[320px]" />
         </div>
 
         <DropdownMenu>
@@ -155,4 +159,6 @@ export function MenuNavigation({ children }) {
 
     </div>
   </div>
-}
+});
+
+export default MenuNavigation;
