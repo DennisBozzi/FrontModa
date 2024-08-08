@@ -85,7 +85,6 @@ export function Produtos() {
   }, [isSuccess]);
 
   useEffect(() => {
-    setCurrentPage(1)
     inputPage.current.value = '';
     if (!isLoading) {
       setLastPage(data.objeto.pageTotal)
@@ -106,9 +105,9 @@ export function Produtos() {
 
             {/* Botões para escolher as tabelas */}
             <TabsList>
-              <TabsTrigger value="todos" onClick={() => (setTipoProduto(1))}>Todos</TabsTrigger>
-              <TabsTrigger value="estoque" onClick={() => (setTipoProduto(2))}>Estoque</TabsTrigger>
-              <TabsTrigger value="vendido" onClick={() => (setTipoProduto(3))}>Vendidos</TabsTrigger>
+              <TabsTrigger value="todos" onMouseDown={() => (setCurrentPage(1), setTipoProduto(1))}>Todos</TabsTrigger>
+              <TabsTrigger value="estoque" onMouseDown={() => (setCurrentPage(1), setTipoProduto(2))}>Estoque</TabsTrigger>
+              <TabsTrigger value="vendido" onMouseDown={() => (setCurrentPage(1), setTipoProduto(3))}>Vendidos</TabsTrigger>
             </TabsList>
 
             {/* Dialog para adicionar novo produto*/}
