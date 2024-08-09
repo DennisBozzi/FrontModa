@@ -193,8 +193,8 @@ export function Produtos() {
                     <TableRow>
                       <TableHead className="w-1/12">#</TableHead>
                       <TableHead className="w-2/6">Nome</TableHead>
-                      <TableHead className="text-center w-2/6">Status</TableHead>
                       <TableHead className="text-center w-2/6">Preço</TableHead>
+                      <TableHead className="text-center w-2/6">Status</TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -205,10 +205,11 @@ export function Produtos() {
                         <TableRow key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
+
+                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                           <TableCell className="text-center">
                             <Badge variant="outline">{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
                           </TableCell>
-                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                         </TableRow>
                       ))
                     ) : (
