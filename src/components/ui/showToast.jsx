@@ -27,3 +27,13 @@ export function showWarningToast(titulo, descricao) {
     duration: 3000,
   };
 }
+
+export function showDefaultToast(titulo, descricao) {
+  return {
+    title: titulo,
+    variant: "default",
+    description: descricao,
+    status: "success",
+    duration: 3000,
+  };
+}

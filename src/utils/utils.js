@@ -1,3 +1,5 @@
+import {format, parseISO} from 'date-fns';
+
 export const formatPrice = (price) => {
   return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)
 }
@@ -15,3 +17,7 @@ export const handlePrecoChange = (e, setNovoPreco) => {
 export const handleInputChange = (e, setNomeFiltro) => {
   setNomeFiltro(e);
 };
+
+export const formatDate = (date) => {
+  return format(parseISO(date), 'dd/MM/yyyy');
+}
