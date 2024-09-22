@@ -214,12 +214,12 @@ export function Produtos() {
                   <TableBody>
                     {!isLoadingProdutos && !isError ? (
                       data.objeto.data.map((produto) => (
-                        <TableRow  className="cursor-pointer" key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
+                        <TableRow className="cursor-pointer" key={produto.id} onClick={() => (setProdutoSelecionado(produto), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{produto.id}</TableCell>
                           <TableCell className="font-medium">{produto.nome}</TableCell>
                           <TableCell className="hidden md:table-cell text-center">{formatDate(produto.criadoEm)}</TableCell>
                           <TableCell className="text-center">
-                            <Badge variant={produto.vendido? "outline" : ""}>{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
+                            <Badge variant={produto.vendido ? "outline" : ""}>{produto.vendido ? 'Vendido' : 'Estoque'}</Badge>
                           </TableCell>
                           <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
                         </TableRow>
@@ -415,7 +415,7 @@ export function Produtos() {
                       placeholder='Produto'
                       value={produtoSelecionado?.nome || ''}
                       onChange={(e) => { handleNomeChange(e, setNovoNome); setProdutoSelecionado({ ...produtoSelecionado, nome: e.target.value }) }}
-                      disabled={isLoadingMutate||isLoadingDelete}
+                      disabled={isLoadingMutate || isLoadingDelete}
                       required
                       className="col-span-3"
                     />
@@ -428,7 +428,7 @@ export function Produtos() {
                       value={produtoSelecionado?.preco || ''}
                       onChange={((e) => { setProdutoSelecionado({ ...produtoSelecionado, preco: e.target.value }); }, setNovoPreco)}
                       maxLength={10}
-                      disabled={isLoadingMutate||isLoadingDelete}
+                      disabled={isLoadingMutate || isLoadingDelete}
                       customInput={Input}
                       required
                       className="col-span-3"
@@ -441,7 +441,7 @@ export function Produtos() {
                   </div>
                 </div>
                 <DialogFooter>
-                <Button type="button" className="text-black dark:text-white" variant="secondary" onClick={(e)=> {submitDelete(e)}} disabled={isLoadingMutate}>
+                  <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>
                     <LoaderCircle className={isLoadingDelete ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
                     {isLoadingDelete ? "Carregando..." : "Excluir"}
                   </Button>

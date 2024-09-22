@@ -1,11 +1,11 @@
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Avatar } from '@radix-ui/react-avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { debounce } from 'lodash';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import {
   Leaf,
   ShoppingBasket,
@@ -13,20 +13,14 @@ import {
   Package,
   PanelLeft,
   Search,
-  Settings
+  Settings,
+  LogOut
 } from "lucide-react"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
   const location = useLocation();
@@ -38,6 +32,7 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
   const isMarcadoLeft = (path) => pathname === path ? marcadoLeft : naoMarcadoLeft;
   const isMarcado = (path) => pathname === path ? marcado : naoMarcado;
   const { logout } = useAuth();
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const debouncedSearch = useCallback(
     debounce((query) => {
@@ -93,18 +88,55 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 py-4">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link className={naoMarcado}>
+            <Link className={naoMarcado} onClick={() => (setIsDialogOpen(true))}>
               <Settings className="h-5 w-5" />
-              <span className="sr-only">Settings</span>
+              <span className="sr-only">Configurações</span>
             </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">Configurações</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Link className={naoMarcado}>
+                  <LogOut className="h-5 w-5" />
+                  <span className="sr-only">Sair</span>
+                </Link>
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Sair</DialogTitle>
+                  <DialogDescription>
+                    Tem certeza que realmente deseja sair?
+                  </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="secondary">
+                      Cancelar
+                    </Button>
+                  </DialogClose>
+                  <Button onClick={() => logout()}>
+                    Sair
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            
           </TooltipTrigger>
           <TooltipContent side="right">Settings</TooltipContent>
         </Tooltip>
+
       </nav>
     </aside>
-    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
 
+    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        {/* Side Sheet */}
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
@@ -131,7 +163,7 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
                 <ShoppingBasket className="h-5 w-5" />
                 Vendas
               </Link>
-              <Link href="#" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
+              <Link href="#" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" onClick={() => (setIsDialogOpen(true))}>
                 <Settings className="h-5 w-5" />
                 Configurações
               </Link>
@@ -145,26 +177,26 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
           <Input type="search" id="search" onChange={handleInputChange} ref={ref} placeholder="Procurar..." className="w-full rounded-lg bg-background pl-8 md:w-[320px] lg:w-[320px]" />
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
-              <Avatar>
-                <img src="https://avatars.githubusercontent.com/u/98779786?v=4" alt="" />
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Configurações</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout}>Sair</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="icon" size="icon" className="overflow-hidden rounded-full" onClick={() => (setIsDialogOpen(true))}>
+          <img src="https://avatars.githubusercontent.com/u/98779786?v=4" alt="" />
+        </Button>
 
       </header>
 
       {children}
 
     </div>
+
+    {/* Dialog edição do produto */}
+    <Dialog open={isDialogOpen} onOpenChange={(e) => { setIsDialogOpen(e) }}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Teste</DialogTitle>
+          <DialogDescription>Teste</DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+
   </div>
 });
 
