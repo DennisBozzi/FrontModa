@@ -70,7 +70,7 @@ export function Produtos() {
   const inputSearch = useRef(null)
   const { toast } = useToast()
   const { data, isLoading: isLoadingProdutos, isError } = useProdutosData(currentPage, tipoProduto, nomeFiltro)
-  const { mutate: deleteProduto, isPending: isLoadingDelete, isSuccess: isSuccessDelete } = useProdutoDelete()
+  const { mutate: deleteProduto, isSuccess: isSuccessDelete, isPending: isLoadingDelete } = useProdutoDelete()
   const { mutate: postProduto, isSuccess: isSuccessPost, isPending: isLoadingMutate } = useProdutoMutate()
 
   const submit = async (e) => {

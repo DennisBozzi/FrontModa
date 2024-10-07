@@ -51,7 +51,7 @@ export function Login() {
     <Tabs defaultValue="login" className="w-[400px] relative">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="login">Entrar</TabsTrigger>
-        <TabsTrigger value="registro">Registrar</TabsTrigger>
+        <TabsTrigger value="registro" disabled>Registrar</TabsTrigger>
       </TabsList>
       <img src={leaf} alt="" className="w-28 absolute -top-36 right-36" />
       <TabsContent value="login">

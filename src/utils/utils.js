@@ -1,4 +1,6 @@
-import {format, parseISO} from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import ellipsis from 'text-ellipsis';
+
 
 export const formatPrice = (price) => {
   return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)
@@ -20,4 +22,9 @@ export const handleInputChange = (e, setNomeFiltro) => {
 
 export const formatDate = (date) => {
   return format(parseISO(date), 'dd/MM/yyyy');
+}
+
+export const formatProducts = (produtos, isSmallScreen) => {
+  var nomes = produtos.map(produto => produto.nome).join(", ");
+  return isSmallScreen ? ellipsis(nomes, 28) : nomes;
 }
