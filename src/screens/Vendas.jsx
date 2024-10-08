@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react"
 import MenuNavigation from "./MenuNavigation"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { useProdutoDelete } from "@/hooks/useProdutoDelete"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -58,11 +57,11 @@ import { useMediaQuery } from 'react-responsive';
 
 export function Vendas() {
 
-  const [produtoSelecionado, setProdutoSelecionado] = useState(null)
+  const [vendaSelecionada, setVendaSelecionada] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [novoNome, setNovoNome] = useState("")
   const [novoPreco, setNovoPreco] = useState("")
-  const [novaData, setNovaData] = useState("")
+  const [produtoDelete, setProdutoDelete] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [lastPage, setLastPage] = useState(1)
   const [nomeFiltro, setNomeFiltro] = useState("")
@@ -88,23 +87,29 @@ export function Vendas() {
       preco: novoPreco.toString().replace(',', '.'),
     }
     if (isDialogOpen) {
-      data.id = produtoSelecionado?.id
+      data.id = vendaSelecionada?.id
     }
     postProduto(data)
   }
 
   const submitDelete = async (e) => {
     e.preventDefault();
-    deleteProduto(produtoSelecionado.id);
+    deleteProduto(vendaSelecionada.id);
   };
 
   useEffect(() => {
     if (isDialogOpen) {
-      // setNovoNome(produtoSelecionado?.nome)
-      // setNovoPreco(produtoSelecionado?.preco)
-      // setNovaData(formatDate(produtoSelecionado?.criadoEm))
+      // setNovoNome(vendaSelecionada?.nome)
+      // setNovoPreco(vendaSelecionada?.preco)
+      // setNovaData(formatDate(vendaSelecionada?.criadoEm))
     }
   }, [isDialogOpen])
+
+  useEffect(() => {
+    if (vendaSelecionada) {
+      console.log(vendaSelecionada)
+    }
+  }, [vendaSelecionada])
 
   useEffect(() => {
     if (isSuccessPost && !isLoadingMutate) {
@@ -139,13 +144,13 @@ export function Vendas() {
               <TabsTrigger value="estoque" disabled>Excluídos</TabsTrigger>
             </TabsList>
 
-            {/* Dialog para adicionar novo produto*/}
+            {/* Dialog para adicionar nova venda*/}
             <Dialog handler={false}>
               <DialogTrigger asChild >
                 <Button onClick={() => { setNovoNome(""); setNovoPreco(""); }} size="sm" className="h-7 gap-1 ">
                   <PlusCircle className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Novo Produto
+                    Nova Venda
                   </span>
                 </Button>
               </DialogTrigger>
@@ -193,9 +198,9 @@ export function Vendas() {
           <TabsContent value="todos">
             <Card>
               <CardHeader>
-                <CardTitle>Todos os Produtos</CardTitle>
+                <CardTitle>Todas as Vendas</CardTitle>
                 <CardDescription>
-                  Gerencie os preços e as informações dos produtos.
+                  Gerencie e crie novas vendas.
                 </CardDescription>
               </CardHeader>
               <CardContent className="tabela overflow-y-auto">
@@ -203,11 +208,11 @@ export function Vendas() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-1/12">#</TableHead>
-                      <TableHead className="w-2/6">Produtos</TableHead>
-                      <TableHead className="hidden text-center w-1/6 md:table-cell">Vendido</TableHead>
+                      <TableHead className="w-2/6 hidden md:table-cell">Produtos</TableHead>
+                      <TableHead className="text-center w-1/6">Vendido</TableHead>
                       <TableHead className="hidden text-center w-1/6 md:table-cell">Itens</TableHead>
                       <TableHead className="text-center w-1/12">Desconto</TableHead>
-                      <TableHead className="text-center w-2/6">Valor Total</TableHead>
+                      <TableHead className="text-center w-1/6">Total</TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -215,10 +220,10 @@ export function Vendas() {
                   <TableBody>
                     {!isLoadingVendas && !isError ? (
                       data.objeto.data.map((venda) => (
-                        <TableRow className="cursor-pointer" key={venda.id} onClick={() => (setProdutoSelecionado(venda), setIsDialogOpen(true))}>
+                        <TableRow className="cursor-pointer" key={venda.id} onClick={() => (setVendaSelecionada(venda), setIsDialogOpen(true))}>
                           <TableCell className="font-medium">{venda.id}</TableCell>
-                          <TableCell className="font-medium">{formatProducts(venda.produtos, isSmallScreen)}</TableCell>
-                          <TableCell className="hidden md:table-cell text-center">{formatDate(venda.vendidoEm)}</TableCell>
+                          <TableCell className="font-medium hidden md:table-cell">{formatProducts(venda.produtos, isSmallScreen)}</TableCell>
+                          <TableCell className="text-center">{formatDate(venda.vendidoEm)}</TableCell>
                           <TableCell className="hidden md:table-cell text-center">{venda.produtos.length}</TableCell>
                           <TableCell className="text-center">{formatPrice(venda.desconto)}</TableCell>
                           <TableCell className="text-center">{formatPrice(venda.valorTotal)}</TableCell>
@@ -284,62 +289,61 @@ export function Vendas() {
           </PaginationContent>
         </Pagination>
 
-        {/* Dialog edição do produto */}
+        {/* Dialog visualização da Venda */}
         <>
           <Dialog open={isDialogOpen} onOpenChange={(e) => { setIsDialogOpen(e) }}>
             <DialogContent>
-              <form onSubmit={submit}>
-                <DialogHeader>
-                  <DialogTitle>{produtoSelecionado?.nome}</DialogTitle>
-                  <DialogDescription>
-                    Edite o nome e o preço do produto
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center">
-                    <Label htmlFor='nome'>Nome</Label>
-                    <Input
-                      id='nome'
-                      maxLength={38}
-                      placeholder='Produto'
-                      value={produtoSelecionado?.nome || ''}
-                      onChange={(e) => { handleNomeChange(e, setNovoNome); setProdutoSelecionado({ ...produtoSelecionado, nome: e.target.value }) }}
-                      disabled={isLoadingMutate || isLoadingDelete}
-                      required
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center">
-                    <Label htmlFor='preco'>Preço</Label>
-                    <FormattedPriceInput
-                      id='preco'
-                      placeholder='0,00'
-                      value={produtoSelecionado?.preco || ''}
-                      onChange={((e) => { setProdutoSelecionado({ ...produtoSelecionado, preco: e.target.value }); }, setNovoPreco)}
-                      maxLength={10}
-                      disabled={isLoadingMutate || isLoadingDelete}
-                      customInput={Input}
-                      required
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center">
-                    <Label htmlFor='criadoEm'>Criação</Label>
-                    <Input id='criadoEm' value={novaData} disabled className="col-span-2 text-center" />
-                    <Badge variant="outline" className="ml-auto col-span-1 w-fit">{produtoSelecionado?.vendido ? 'Vendido' : 'Estoque'}</Badge>
-                  </div>
+
+              <DialogHeader>
+                <DialogTitle>Venda</DialogTitle>
+                <DialogDescription>
+                  Venda realizada no dia {formatDate(vendaSelecionada?.vendidoEm)}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid gap-4 py-4">
+                <Table id="tableVenda">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-2/6 text-center">Nome</TableHead>
+                      <TableHead className="w-2/6 text-center">Valor</TableHead>
+                      <TableHead className="w-2/6 text-center">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {vendaSelecionada?.produtos ? (
+                      vendaSelecionada.produtos.map((produto) => (
+                        <TableRow key={produto.id}>
+                          <TableCell className="text-center">{produto.nome}</TableCell>
+                          <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
+                          <TableCell className="text-center"><Button variant="destructive" onClick={() => console.log(produto)}>Excluir</Button></TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan="3" className="text-center">No products available</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+
+                <div className="grid grid-cols-4 items-center">
+                  <Label htmlFor='preco' className="text-center">Desconto</Label>
+                  <FormattedPriceInput value={vendaSelecionada?.desconto || '0,00'} disabled customInput={Input} className="col-span-1" />
+                  <Label htmlFor='preco' className="text-center">Valor Total</Label>
+                  <FormattedPriceInput value={vendaSelecionada?.valorTotal || '0,00'} disabled customInput={Input} className="col-span-1" />
                 </div>
-                <DialogFooter>
-                  <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>
-                    <LoaderCircle className={isLoadingDelete ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                    {isLoadingDelete ? "Carregando..." : "Excluir"}
-                  </Button>
-                  <Button type="submit" disabled={isLoadingDelete}>
-                    <LoaderCircle className={isLoadingMutate ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                    {isLoadingMutate ? "Carregando..." : "Salvar"}
-                  </Button>
-                </DialogFooter>
-              </form>
+              </div>
+
+              <DialogFooter>
+                <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>
+                  <LoaderCircle className={isLoadingDelete ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                  {isLoadingDelete ? "Carregando..." : "Excluir"}
+                </Button>
+                <Button type="submit" variant="secondary" disabled={isLoadingDelete} onClick={() => setIsDialogOpen(false)}>
+                  Fechar
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </>

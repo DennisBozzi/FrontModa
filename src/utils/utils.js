@@ -21,10 +21,10 @@ export const handleInputChange = (e, setNomeFiltro) => {
 };
 
 export const formatDate = (date) => {
-  return format(parseISO(date), 'dd/MM/yyyy');
+  return date ? format(parseISO(date), 'dd/MM/yyyy') : '';
 }
 
 export const formatProducts = (produtos, isSmallScreen) => {
   var nomes = produtos.map(produto => produto.nome).join(", ");
-  return isSmallScreen ? ellipsis(nomes, 28) : nomes;
+  return isSmallScreen ? ellipsis(nomes, 21) : nomes;
 }
