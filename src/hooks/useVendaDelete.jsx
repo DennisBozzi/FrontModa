@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../api/axiosInstance";
 
-const deleteProduto = async (id) => {
-  const response = await axiosInstance.put(`/venda/${id}`);
+const deleteVenda = async (id) => {
+  const response = await axiosInstance.delete(`/venda/${id}`);
   return response;
 };
 
-export function useProdutoDelete() {
+export function useVendaDelete() {
   const queryCliente = useQueryClient();
   const mutate = useMutation({
-    mutationFn: deleteProduto,
+    mutationFn: deleteVenda,
     onSuccess: () => {
       queryCliente.invalidateQueries(["produtosData"]);
     },

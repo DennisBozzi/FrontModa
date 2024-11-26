@@ -187,7 +187,6 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
 
     </div>
 
-    {/* Dialog edição do produto */}
     <Dialog open={isDialogOpen} onOpenChange={(e) => { setIsDialogOpen(e) }}>
       <DialogContent>
         <DialogHeader>

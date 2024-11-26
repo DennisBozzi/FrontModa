@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const localUrl = 'http://localhost:55000';
+const deployUrl = 'https://backmoda.onrender.com';
+
 const axiosInstance = axios.create({
-  baseURL: 'https://backmoda.onrender.com',
+  baseURL: deployUrl,
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${localStorage.getItem('authToken')}`,

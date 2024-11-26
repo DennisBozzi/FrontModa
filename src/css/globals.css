@@ -70,7 +70,6 @@
   background: rgb(38 38 38 / 0.5);
 }
 
-
 @layer base {
   * {
     @apply border-border;

@@ -11,7 +11,7 @@ import { showSuccessToast, showDefaultToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
 import FormattedPriceInput from "@/components/ui/price-input"
-import { formatPrice, handleNomeChange, handleInputChange, formatDate, formatProducts } from "@/utils/utils"
+import { formatPrice, handleInputChange, formatDate, formatProducts } from "@/utils/utils"
 import {
   Tabs,
   TabsContent,
@@ -54,22 +54,37 @@ import {
 } from "@/components/ui/pagination"
 import { useVendasData } from "@/hooks/useVendasData"
 import { useMediaQuery } from 'react-responsive';
+import { useVendaDelete } from "@/hooks/useVendaDelete"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 
 export function Vendas() {
 
   const [vendaSelecionada, setVendaSelecionada] = useState(null)
+  const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [novoNome, setNovoNome] = useState("")
   const [novoPreco, setNovoPreco] = useState("")
-  const [produtoDelete, setProdutoDelete] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [lastPage, setLastPage] = useState(1)
   const [nomeFiltro, setNomeFiltro] = useState("")
   const inputPage = useRef(null)
   const inputSearch = useRef(null)
   const { toast } = useToast()
+  //Nova venda
+  const [novoDesconto, setNovoDesconto] = useState("")
+
   const { data, isLoading: isLoadingVendas, isError } = useVendasData(currentPage, nomeFiltro)
   const { mutate: deleteProduto, isSuccess: isSuccessDelete, isPending: isLoadingDelete } = useProdutoDelete()
+  const { mutate: deleteVenda, isSuccess: isSuccessDeleteVenda, isPending: isLoadingDeleteVenda } = useVendaDelete()
   const { mutate: postProduto, isSuccess: isSuccessPost, isPending: isLoadingMutate } = useProdutoMutate()
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1050px)' });
 
@@ -78,7 +93,6 @@ export function Vendas() {
     if (!isLoadingVendas)
       console.log(data)
   }, [isLoadingVendas]);
-
 
   const submit = async (e) => {
     e.preventDefault();
@@ -92,16 +106,23 @@ export function Vendas() {
     postProduto(data)
   }
 
-  const submitDelete = async (e) => {
-    e.preventDefault();
-    deleteProduto(vendaSelecionada.id);
+  //Apagar o produto da lista de Venda
+  const submitDeleteProduto = async (e, produto) => {
+    e.preventDefault()
+    deleteProduto(produto.id)
+    setProdutoSelecionado(produto)
+  };
+
+  //Apagar a venda
+  const submitDeleteVenda = async (e, venda) => {
+    e.preventDefault()
+    deleteVenda(venda.id)
+    setVendaSelecionada(venda)
   };
 
   useEffect(() => {
     if (isDialogOpen) {
-      // setNovoNome(vendaSelecionada?.nome)
-      // setNovoPreco(vendaSelecionada?.preco)
-      // setNovaData(formatDate(vendaSelecionada?.criadoEm))
+
     }
   }, [isDialogOpen])
 
@@ -124,10 +145,22 @@ export function Vendas() {
 
   useEffect(() => {
     if (isSuccessDelete && !isLoadingDelete) {
-      toast(showDefaultToast(novoNome, 'Produto excluído com sucesso! R$' + novoPreco));
+      //Removendo o produto da lista após a exclusão
+      vendaSelecionada.produtos = vendaSelecionada.produtos.filter((produto) => produto.id !== produtoSelecionado.id)
+      toast(showDefaultToast(novoNome, 'Produto excluído com sucesso!'));
+      //Fechando o modal, caso ao apague o último produto
+      if (vendaSelecionada.produtos.length === 0)
+        setIsDialogOpen(false)
     }
-    setIsDialogOpen(false)
   }, [isSuccessDelete]);
+
+
+  useEffect(() => {
+    if (isSuccessDeleteVenda && !isLoadingDeleteVenda) {
+      toast(showDefaultToast(novoNome, 'Venda excluída com sucesso!'));
+      setIsDialogOpen(false)
+    }
+  }, [isSuccessDeleteVenda]);
 
   useEffect(() => { setCurrentPage(1); if (!isLoadingVendas) { setLastPage(data.objeto.pageTotal) } }, [nomeFiltro]);
   useEffect(() => { if (!isLoadingVendas) { setLastPage(data.objeto.pageTotal) } }, [isLoadingVendas]);
@@ -156,42 +189,48 @@ export function Vendas() {
               </DialogTrigger>
               <DialogContent>
 
-                <form onSubmit={submit}>
-                  <DialogHeader>
-                    <DialogTitle>Novo Produto</DialogTitle>
-                    <DialogDescription>
-                      Escreva o nome e o preço do novo produto
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center">
-                      <Label htmlFor='nome'>Nome</Label>
-                      <Input id='nome' maxLength={38} placeholder='Produto' value={novoNome} onChange={(e) => (handleNomeChange(e, setNovoNome))} disabled={isLoadingMutate} required className="col-span-3" />
+                <DialogHeader>
+                  <DialogTitle>Nova Venda</DialogTitle>
+                  <DialogDescription>Cadastre uma nova venda.</DialogDescription>
+                </DialogHeader>
+
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <Button variant="default" className='w-full sm:w-fit m-auto sm:ml-auto'>Selecionar Produto</Button>
+                  </DrawerTrigger>
+                  <DrawerContent>
+                    <div className="mx-auto w-full max-w-sm">
+                      <DrawerHeader>
+                        <DrawerTitle>Selecione um Produto</DrawerTitle>
+                        <DrawerDescription></DrawerDescription>
+                      </DrawerHeader>
+
+
+                      <DrawerFooter>
+                        <Button>Confirmar</Button>
+                        <DrawerClose asChild>
+                          <Button variant="outline">Fechar</Button>
+                        </DrawerClose>
+                      </DrawerFooter>
                     </div>
-                    <div className="grid grid-cols-4 items-center">
-                      <Label htmlFor='preco'>Preço</Label>
-                      <FormattedPriceInput
-                        id='preco'
-                        placeholder='0,00'
-                        value={novoPreco}
-                        onChange={setNovoPreco}
-                        maxLength={10}
-                        disabled={isLoadingMutate}
-                        customInput={Input}
-                        required className="col-span-3" />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">
-                      <LoaderCircle className={isLoadingMutate ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                      {isLoadingMutate ? "Carregando..." : "Salvar"}
-                    </Button>
-                  </DialogFooter>
-                </form>
+                  </DrawerContent>
+                </Drawer>
+
+
+                <div className="flex items-center gap-8">
+                  <Label htmlFor='desconto'>Desconto</Label>
+                  <Input id='desconto' value={novoDesconto} onChange={(e) => setNovoDesconto(e.target.value)} />
+                </div>
+                <DialogFooter>
+                  <Button type="submit">
+                    <LoaderCircle className={isLoadingMutate ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                    {isLoadingMutate ? "Carregando..." : "Salvar"}
+                  </Button>
+                </DialogFooter>
+
 
               </DialogContent>
             </Dialog>
-
           </div>
 
           {/* Todos */}
@@ -310,13 +349,18 @@ export function Vendas() {
                       <TableHead className="w-2/6 text-center">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <TableBody>
+                  <TableBody className='h-96 overflow-scroll'>
                     {vendaSelecionada?.produtos ? (
                       vendaSelecionada.produtos.map((produto) => (
                         <TableRow key={produto.id}>
                           <TableCell className="text-center">{produto.nome}</TableCell>
                           <TableCell className="text-center">{formatPrice(produto.preco)}</TableCell>
-                          <TableCell className="text-center"><Button variant="destructive" onClick={() => console.log(produto)}>Excluir</Button></TableCell>
+                          <TableCell className="text-center">
+                            <Button disabled={isLoadingDelete || isLoadingDeleteVenda}
+                              variant="destructive" onClick={(e) => submitDeleteProduto(e, produto)}>
+                              Excluir
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -336,11 +380,11 @@ export function Vendas() {
               </div>
 
               <DialogFooter>
-                <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>
-                  <LoaderCircle className={isLoadingDelete ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                  {isLoadingDelete ? "Carregando..." : "Excluir"}
+                <Button type="button" disabled={isLoadingDelete || isLoadingDeleteVenda} className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDeleteVenda(e, vendaSelecionada) }}>
+                  <LoaderCircle className={isLoadingDeleteVenda ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
+                  {isLoadingDeleteVenda ? "Carregando..." : "Excluir"}
                 </Button>
-                <Button type="submit" variant="secondary" disabled={isLoadingDelete} onClick={() => setIsDialogOpen(false)}>
+                <Button type="submit" variant="secondary" disabled={isLoadingDelete || isLoadingDeleteVenda} onClick={() => setIsDialogOpen(false)}>
                   Fechar
                 </Button>
               </DialogFooter>
