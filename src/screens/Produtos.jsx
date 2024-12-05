@@ -8,12 +8,13 @@ import { useProdutoDelete } from "@/hooks/useProdutoDelete"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProdutoMutate } from "@/hooks/useProdutoMutate"
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, ShoppingCart } from 'lucide-react'
 import { showSuccessToast, showDefaultToast } from '@/components/ui/showToast'
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
 import FormattedPriceInput from "@/components/ui/price-input"
 import { formatPrice, handleNomeChange, handleInputChange, formatDate } from "@/utils/utils"
+import { useCart } from "@/components/contexts/cartContext"
 import {
   Tabs,
   TabsContent,
@@ -48,7 +49,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -57,6 +57,8 @@ import {
 
 export function Produtos() {
 
+  const [cart, setCart] = useState([]);
+  const { addToCart } = useCart();
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [novoNome, setNovoNome] = useState("")
@@ -89,6 +91,17 @@ export function Produtos() {
     e.preventDefault();
     deleteProduto(produtoSelecionado.id);
   };
+
+  const addOnCart = async (e) => {
+    e.preventDefault();
+    addToCart(produtoSelecionado);
+  };
+
+  useEffect(() => { console.log(cart) }, [cart])
+
+  const cleanCart = async () => {
+    setCart([]);
+  }
 
   useEffect(() => {
     if (isDialogOpen) {
@@ -354,7 +367,7 @@ export function Produtos() {
         </Tabs>
 
         {/* Pagination */}
-        <Pagination className="mt-4">
+        <Pagination className="sm:mt-4 mt-2">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious href="#" onClick={() => (setCurrentPage(1))} />
@@ -441,6 +454,9 @@ export function Produtos() {
                   </div>
                 </div>
                 <DialogFooter>
+                  <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2 w-full" variant="secondary" onClick={(e) => { addOnCart(e) }} disabled={isLoadingMutate}>
+                    <ShoppingCart />
+                  </Button>
                   <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>
                     <LoaderCircle className={isLoadingDelete ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
                     {isLoadingDelete ? "Carregando..." : "Excluir"}

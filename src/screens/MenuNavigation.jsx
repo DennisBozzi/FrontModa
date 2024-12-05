@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
@@ -21,8 +21,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { CartBadge } from '@/components/material-ui/badge';
+import { useCart } from '@/components/contexts/cartContext';
 
-const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
+const MenuNavigation = forwardRef(({ children, onSearch, novoProduto }, ref) => {
   const location = useLocation();
   const pathname = location.pathname;
   const marcado = 'flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8';
@@ -126,7 +128,7 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            
+
           </TooltipTrigger>
           <TooltipContent side="right">Settings</TooltipContent>
         </Tooltip>
@@ -134,7 +136,7 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
       </nav>
     </aside>
 
-    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
+    <div className="flex flex-col sm:gap-4 sm:py-4 xl:pl-14 w-full">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         {/* Side Sheet */}
         <Sheet>
@@ -147,27 +149,33 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
           <SheetContent side="left" className="sm:max-w-xs">
             <SheetTitle></SheetTitle>
             <SheetDescription></SheetDescription>
-            <nav className="grid gap-6 text-lg font-medium">
-              <Link to="/Home" className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
-                <Leaf className="h-5 w-5 transition-all group-hover:scale-110" />
+            <div className=' flex flex-col justify-between h-full'>
+              <nav className="grid gap-6 text-lg font-medium">
+                <Link to="/Home" className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base">
+                  <Leaf className="h-5 w-5 transition-all group-hover:scale-110" />
+                </Link>
+                <Link to="/Home" className={isMarcadoLeft('/Home')} >
+                  <Home className="h-5 w-5" />
+                  Início
+                </Link>
+                <Link to="/Produtos" className={isMarcadoLeft('/Produtos')}>
+                  <Package className="h-5 w-5" />
+                  Produtos
+                </Link>
+                <Link to="/Vendas" className={isMarcadoLeft('/Vendas')}>
+                  <ShoppingBasket className="h-5 w-5" />
+                  Vendas
+                </Link>
+                <Link href="#" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" onClick={() => (setIsDialogOpen(true))}>
+                  <Settings className="h-5 w-5" />
+                  Configurações
+                </Link>
+              </nav>
+              <Link href="#" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" onClick={() => (logout())}>
+                <LogOut className="h-5 w-5" />
+                Sair
               </Link>
-              <Link to="/Home" className={isMarcadoLeft('/Home')} >
-                <Home className="h-5 w-5" />
-                Início
-              </Link>
-              <Link to="/Produtos" className={isMarcadoLeft('/Produtos')}>
-                <Package className="h-5 w-5" />
-                Produtos
-              </Link>
-              <Link to="/Vendas" className={isMarcadoLeft('/Vendas')}>
-                <ShoppingBasket className="h-5 w-5" />
-                Vendas
-              </Link>
-              <Link href="#" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" onClick={() => (setIsDialogOpen(true))}>
-                <Settings className="h-5 w-5" />
-                Configurações
-              </Link>
-            </nav>
+            </div>
           </SheetContent>
 
         </Sheet>
@@ -176,6 +184,8 @@ const MenuNavigation = forwardRef(({ children, onSearch }, ref) => {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input type="search" id="search" onChange={handleInputChange} ref={ref} placeholder="Procurar..." className="w-full rounded-lg bg-background pl-8 md:w-[320px] lg:w-[320px]" />
         </div>
+
+        <CartBadge cartList={novoProduto} />
 
         <Button variant="icon" size="icon" className="overflow-hidden rounded-full" onClick={() => (setIsDialogOpen(true))}>
           <img src="https://avatars.githubusercontent.com/u/98779786?v=4" alt="" />

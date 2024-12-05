@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ToastProvider } from "@/components/ui/toast";
 import { IsLoggedRoute, LoginRoute } from "@/components/ProtectedRoute";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CartProvider } from "./components/contexts/cartContext";
 
 
 const router = createBrowserRouter([
@@ -31,11 +32,13 @@ export function App() {
     <>
       <AuthProvider>
         <ToastProvider>
-          <TooltipProvider>
-            <RouterProvider router={router} >
-            </RouterProvider>
-          </TooltipProvider>
-          <Toaster />
+          <CartProvider>
+            <TooltipProvider>
+              <RouterProvider router={router} >
+              </RouterProvider>
+            </TooltipProvider>
+            <Toaster />
+          </CartProvider>
         </ToastProvider>
       </AuthProvider>
     </>

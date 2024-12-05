@@ -71,6 +71,7 @@ export function Vendas() {
   const [vendaSelecionada, setVendaSelecionada] = useState(null)
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [showPagination, setShowPagination] = useState(true)
   const [novoNome, setNovoNome] = useState("")
   const [novoPreco, setNovoPreco] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -88,23 +89,10 @@ export function Vendas() {
   const { mutate: postProduto, isSuccess: isSuccessPost, isPending: isLoadingMutate } = useProdutoMutate()
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1050px)' });
 
-
   useEffect(() => {
     if (!isLoadingVendas)
       console.log(data)
   }, [isLoadingVendas]);
-
-  const submit = async (e) => {
-    e.preventDefault();
-    const data = {
-      nome: novoNome,
-      preco: novoPreco.toString().replace(',', '.'),
-    }
-    if (isDialogOpen) {
-      data.id = vendaSelecionada?.id
-    }
-    postProduto(data)
-  }
 
   //Apagar o produto da lista de Venda
   const submitDeleteProduto = async (e, produto) => {
@@ -168,73 +156,18 @@ export function Vendas() {
   return <>
     <MenuNavigation onSearch={(e) => (handleInputChange(e, setNomeFiltro))} ref={inputSearch}>
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-        <Tabs defaultValue="todos">
+        <Tabs defaultValue="vendas">
           <div className="flex place-content-between">
-
-            {/* Botões para escolher as tabelas */}
-            <TabsList>
-              <TabsTrigger value="todos">Todos</TabsTrigger>
-              <TabsTrigger value="estoque" disabled>Excluídos</TabsTrigger>
+            
+            <TabsList className='w-full justify-between bg-transparent p-0'>
+              <div className="bg-secondary rounded-lg p-1">
+                <TabsTrigger onMouseDown={() => setShowPagination(true)} value="vendas">Vendas</TabsTrigger>
+              </div>
             </TabsList>
-
-            {/* Dialog para adicionar nova venda*/}
-            <Dialog handler={false}>
-              <DialogTrigger asChild >
-                <Button onClick={() => { setNovoNome(""); setNovoPreco(""); }} size="sm" className="h-7 gap-1 ">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Nova Venda
-                  </span>
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-
-                <DialogHeader>
-                  <DialogTitle>Nova Venda</DialogTitle>
-                  <DialogDescription>Cadastre uma nova venda.</DialogDescription>
-                </DialogHeader>
-
-                <Drawer>
-                  <DrawerTrigger asChild>
-                    <Button variant="default" className='w-full sm:w-fit m-auto sm:ml-auto'>Selecionar Produto</Button>
-                  </DrawerTrigger>
-                  <DrawerContent>
-                    <div className="mx-auto w-full max-w-sm">
-                      <DrawerHeader>
-                        <DrawerTitle>Selecione um Produto</DrawerTitle>
-                        <DrawerDescription></DrawerDescription>
-                      </DrawerHeader>
-
-
-                      <DrawerFooter>
-                        <Button>Confirmar</Button>
-                        <DrawerClose asChild>
-                          <Button variant="outline">Fechar</Button>
-                        </DrawerClose>
-                      </DrawerFooter>
-                    </div>
-                  </DrawerContent>
-                </Drawer>
-
-
-                <div className="flex items-center gap-8">
-                  <Label htmlFor='desconto'>Desconto</Label>
-                  <Input id='desconto' value={novoDesconto} onChange={(e) => setNovoDesconto(e.target.value)} />
-                </div>
-                <DialogFooter>
-                  <Button type="submit">
-                    <LoaderCircle className={isLoadingMutate ? "mr-2 h-4 w-4 animate-spin" : "hidden"} />
-                    {isLoadingMutate ? "Carregando..." : "Salvar"}
-                  </Button>
-                </DialogFooter>
-
-
-              </DialogContent>
-            </Dialog>
           </div>
 
-          {/* Todos */}
-          <TabsContent value="todos">
+          {/* Vendas */}
+          <TabsContent value="vendas">
             <Card>
               <CardHeader>
                 <CardTitle>Todas as Vendas</CardTitle>
@@ -287,7 +220,7 @@ export function Vendas() {
         </Tabs>
 
         {/* Pagination */}
-        <Pagination className="mt-4">
+        <Pagination className={`sm:mt-4 mt-2 ${showPagination ? '' : 'hidden'}`}>
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious href="#" onClick={() => (setCurrentPage(1))} />
@@ -328,7 +261,8 @@ export function Vendas() {
           </PaginationContent>
         </Pagination>
 
-        {/* Dialog visualização da Venda */}
+        {/* Dialog visualização da Venda  */}
+        {/* TODO: Implementar scroll na tabela de produtos */}
         <>
           <Dialog open={isDialogOpen} onOpenChange={(e) => { setIsDialogOpen(e) }}>
             <DialogContent>
@@ -349,7 +283,7 @@ export function Vendas() {
                       <TableHead className="w-2/6 text-center">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <TableBody className='h-96 overflow-scroll'>
+                  <TableBody className='overflow-scroll'>
                     {vendaSelecionada?.produtos ? (
                       vendaSelecionada.produtos.map((produto) => (
                         <TableRow key={produto.id}>
