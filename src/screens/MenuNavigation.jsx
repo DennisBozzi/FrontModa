@@ -56,7 +56,7 @@ const MenuNavigation = forwardRef(({ children, onSearch, novoProduto }, ref) => 
           <Leaf className="h-5 w-5" />
         </Link>
 
-        <Tooltip>
+        {/* <Tooltip>
           <TooltipTrigger asChild>
             <Link to="/Home" className={isMarcado('/Home')} >
               <Home className="h-5 w-5" />
@@ -64,7 +64,7 @@ const MenuNavigation = forwardRef(({ children, onSearch, novoProduto }, ref) => 
             </Link>
           </TooltipTrigger>
           <TooltipContent side="right">Início</TooltipContent>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip>
           <TooltipTrigger asChild>

@@ -38,7 +38,7 @@ export function Login() {
     setLoading(true);
     try {
       await login(email, senha);
-      navigate('/Home');
+      navigate('/Produtos');
       toast(showSuccessToast('Login efetuado', 'Seja bem vindo!'));
     } catch (e) {
       setLoading(false);

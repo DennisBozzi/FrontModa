@@ -54,6 +54,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import PageTitle from "@/components/PageTitle"
 
 export function Produtos() {
 
@@ -73,6 +74,7 @@ export function Produtos() {
   const { data, isLoading: isLoadingProdutos, isError } = useProdutosData(currentPage, tipoProduto, nomeFiltro)
   const { mutate: deleteProduto, isSuccess: isSuccessDelete, isPending: isLoadingDelete } = useProdutoDelete()
   const { mutate: postProduto, isSuccess: isSuccessPost, isPending: isLoadingMutate } = useProdutoMutate()
+  PageTitle({ title: "Produtos" })
 
   const submit = async (e) => {
     e.preventDefault();

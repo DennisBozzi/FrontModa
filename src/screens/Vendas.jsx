@@ -55,16 +55,7 @@ import {
 import { useVendasData } from "@/hooks/useVendasData"
 import { useMediaQuery } from 'react-responsive';
 import { useVendaDelete } from "@/hooks/useVendaDelete"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+import PageTitle from "@/components/PageTitle"
 
 export function Vendas() {
 
@@ -78,11 +69,11 @@ export function Vendas() {
   const inputPage = useRef(null)
   const inputSearch = useRef(null)
   const { toast } = useToast()
-
   const { data, isLoading: isLoadingVendas, isError } = useVendasData(currentPage, nomeFiltro)
   const { mutate: deleteProduto, isSuccess: isSuccessDelete, isPending: isLoadingDelete } = useProdutoDelete()
   const { mutate: deleteVenda, isSuccess: isSuccessDeleteVenda, isPending: isLoadingDeleteVenda } = useVendaDelete()
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1050px)' });
+  PageTitle({ title: "Vendas" });
 
   //Apagar o produto da lista de Venda
   const submitDeleteProduto = async (e, produto) => {
@@ -125,7 +116,7 @@ export function Vendas() {
       <main className="items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <Tabs defaultValue="vendas">
           <div className="flex place-content-between">
-            
+
             <TabsList className='w-full justify-between bg-transparent p-0'>
               <div className="bg-secondary rounded-lg p-1">
                 <TabsTrigger onMouseDown={() => setShowPagination(true)} value="vendas">Vendas</TabsTrigger>
@@ -229,7 +220,6 @@ export function Vendas() {
         </Pagination>
 
         {/* Dialog visualização da Venda  */}
-        {/* TODO: Implementar scroll na tabela de produtos */}
         <>
           <Dialog open={isDialogOpen} onOpenChange={(e) => { setIsDialogOpen(e) }}>
             <DialogContent>

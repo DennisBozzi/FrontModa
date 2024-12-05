@@ -45,7 +45,7 @@ export const LoginRoute = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/Home" replace />;
+    return <Navigate to="/Produtos" replace />;
   }
 
   return children;
