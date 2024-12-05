@@ -57,7 +57,6 @@ import {
 
 export function Produtos() {
 
-  const [cart, setCart] = useState([]);
   const { addToCart } = useCart();
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -96,12 +95,6 @@ export function Produtos() {
     e.preventDefault();
     addToCart(produtoSelecionado);
   };
-
-  useEffect(() => { console.log(cart) }, [cart])
-
-  const cleanCart = async () => {
-    setCart([]);
-  }
 
   useEffect(() => {
     if (isDialogOpen) {
@@ -454,7 +447,7 @@ export function Produtos() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2 w-full" variant="secondary" onClick={(e) => { addOnCart(e) }} disabled={isLoadingMutate}>
+                  <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2 w-full" variant="secondary" onClick={(e) => { addOnCart(e), setIsDialogOpen(!isDialogOpen) }} disabled={isLoadingMutate || produtoSelecionado?.vendido}>
                     <ShoppingCart />
                   </Button>
                   <Button type="button" className="text-black dark:text-white sm:mt-0 mt-2" variant="secondary" onClick={(e) => { submitDelete(e) }} disabled={isLoadingMutate}>

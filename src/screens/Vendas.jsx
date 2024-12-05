@@ -72,27 +72,17 @@ export function Vendas() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [showPagination, setShowPagination] = useState(true)
-  const [novoNome, setNovoNome] = useState("")
-  const [novoPreco, setNovoPreco] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [lastPage, setLastPage] = useState(1)
   const [nomeFiltro, setNomeFiltro] = useState("")
   const inputPage = useRef(null)
   const inputSearch = useRef(null)
   const { toast } = useToast()
-  //Nova venda
-  const [novoDesconto, setNovoDesconto] = useState("")
 
   const { data, isLoading: isLoadingVendas, isError } = useVendasData(currentPage, nomeFiltro)
   const { mutate: deleteProduto, isSuccess: isSuccessDelete, isPending: isLoadingDelete } = useProdutoDelete()
   const { mutate: deleteVenda, isSuccess: isSuccessDeleteVenda, isPending: isLoadingDeleteVenda } = useVendaDelete()
-  const { mutate: postProduto, isSuccess: isSuccessPost, isPending: isLoadingMutate } = useProdutoMutate()
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1050px)' });
-
-  useEffect(() => {
-    if (!isLoadingVendas)
-      console.log(data)
-  }, [isLoadingVendas]);
 
   //Apagar o produto da lista de Venda
   const submitDeleteProduto = async (e, produto) => {
@@ -109,33 +99,10 @@ export function Vendas() {
   };
 
   useEffect(() => {
-    if (isDialogOpen) {
-
-    }
-  }, [isDialogOpen])
-
-  useEffect(() => {
-    if (vendaSelecionada) {
-      console.log(vendaSelecionada)
-    }
-  }, [vendaSelecionada])
-
-  useEffect(() => {
-    if (isSuccessPost && !isLoadingMutate) {
-      if (isDialogOpen) {
-        toast(showSuccessToast(novoNome, 'Produto alterado com sucesso! R$' + novoPreco));
-      }
-      if (!isDialogOpen) {
-        toast(showSuccessToast(novoNome, 'Produto cadastrado com sucesso! R$' + novoPreco));
-      }
-    }
-  }, [isSuccessPost]);
-
-  useEffect(() => {
     if (isSuccessDelete && !isLoadingDelete) {
       //Removendo o produto da lista após a exclusão
       vendaSelecionada.produtos = vendaSelecionada.produtos.filter((produto) => produto.id !== produtoSelecionado.id)
-      toast(showDefaultToast(novoNome, 'Produto excluído com sucesso!'));
+      toast(showDefaultToast('Produto excluído com sucesso!'));
       //Fechando o modal, caso ao apague o último produto
       if (vendaSelecionada.produtos.length === 0)
         setIsDialogOpen(false)
@@ -145,7 +112,7 @@ export function Vendas() {
 
   useEffect(() => {
     if (isSuccessDeleteVenda && !isLoadingDeleteVenda) {
-      toast(showDefaultToast(novoNome, 'Venda excluída com sucesso!'));
+      toast(showDefaultToast('Venda excluída com sucesso!'));
       setIsDialogOpen(false)
     }
   }, [isSuccessDeleteVenda]);
@@ -274,7 +241,7 @@ export function Vendas() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-4 py-4 h-96 overflow-y-auto">
                 <Table id="tableVenda">
                   <TableHeader>
                     <TableRow>
